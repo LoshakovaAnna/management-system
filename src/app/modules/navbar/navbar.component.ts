@@ -3,6 +3,9 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatListModule} from '@angular/material/list';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 
+import {UrlPageEnum} from '@core/enums';
+
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -16,5 +19,6 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   standalone: true
 })
 export class NavbarComponent {
+  urlMap = UrlPageEnum;
 
 }
