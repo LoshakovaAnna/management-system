@@ -1,0 +1,38 @@
+<main>
+  <div class="docs-primary-header">
+    <h1>{{title}}</h1>
+  </div>
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <mat-card class="">
+      <mat-card-content>
+
+        <div class="row">
+          <div class="col fl-basis">
+            <mat-form-field class="full-width">
+              <mat-label>Company name</mat-label>
+              <input matInput placeholder="Enter company name..." formControlName="name">
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="">
+              <mat-label>Id</mat-label>
+              <input matInput placeholder="Id" formControlName="id">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="full-width">
+              <mat-label>Company Description</mat-label>
+              <textarea matInput placeholder="Enter company description..." formControlName="description">
+              </textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</main>
