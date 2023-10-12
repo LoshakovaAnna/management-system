@@ -14,6 +14,11 @@ const routes: Routes = [
     loadComponent: () => import('./modules/pages/home-page/home-page.component')
       .then(mod => mod.HomePageComponent),
   },
+  {
+    path: UrlPageEnum.projects,
+    loadChildren: () => import('./modules/pages/projects-page/projects-page.module')
+      .then(mod => mod.ProjectsPageModule),
+  },
 ];
 
 @NgModule({

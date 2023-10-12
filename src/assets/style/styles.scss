@@ -1,3 +1,50 @@
 @import "variables";
 @import "library";
 
+body {
+  background: $dark-gray;
+}
+
+.docs-primary-header {
+  padding-left: 20px;
+  background: $primary-color;
+
+  display: block;
+
+  h1 {
+    font-weight: 300;
+    margin: 0;
+    padding: 28px 0;
+    font-size: 20px;
+    color: #fff;
+  }
+}
+
+
+.content-container {
+  border: 1px solid $light-gray;
+  border-radius: 4px;
+  background: $gray-color;
+  margin: 20px;
+}
+
+th {
+  vertical-align: middle;
+}
+
+.notify-msg.mat-mdc-snack-bar-container {
+   .mdc-snackbar__surface {
+    background-color: $gray-color;
+    border: 3px solid $light-gray;
+    border-radius: 4px;
+  }
+
+  .mdc-snackbar__label {
+
+    color: white;
+  }
+
+  &.error-msg .mdc-snackbar__label {
+    color: $light-red;
+  }
+}
