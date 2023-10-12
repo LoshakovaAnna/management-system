@@ -10,9 +10,10 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
 
 import {ProjectsPageComponent} from './projects-page.component';
-import {ProjectComponent} from './project/project.component';
 import {ProjectManageComponent} from './project-manage/project-manage.component';
 
 
@@ -30,7 +31,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ProjectsPageComponent,
-    ProjectComponent,
     ProjectManageComponent
   ],
   imports: [
@@ -45,6 +45,8 @@ const routes: Routes = [
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
+    MatListModule,
   ]
 })
 export class ProjectsPageModule {

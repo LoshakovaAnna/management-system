@@ -1,11 +1,16 @@
-import {AfterViewInit, Component, inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, inject, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
+import {of, switchMap} from 'rxjs';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {MatDialog} from '@angular/material/dialog';
 
-import {PROJECT_SERVICE} from '@core/services';
-import {ProjectModel} from '@core/models';
+import {NotificationServer, PROJECT_SERVICE} from '@core/services';
+import {ConfirmWindowDataModel, ProjectModel} from '@core/models';
+import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
+
 
 @Component({
   selector: 'app-projects-page',
@@ -14,6 +19,7 @@ import {ProjectModel} from '@core/models';
 })
 export class ProjectsPageComponent implements OnInit, AfterViewInit {
 
+  destroyRef = inject(DestroyRef);
   projectService = inject(PROJECT_SERVICE);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -26,7 +32,10 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'description'];
   extraDisplayedColumns: string[] = [...this.displayedColumns, 'action'];
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              public dialog: MatDialog,
+              private notificationServer: NotificationServer) {
   }
 
   ngOnInit() {
@@ -34,7 +43,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.projectService.getProjects()
-      .pipe()
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(
         {
           next: (data) => {
@@ -43,7 +52,9 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           },
-          error: (e) => console.error(e),
+          error: () => {
+            this.notificationServer.showErrorNotification('Error: load projects list is failed!');
+          },
         });
   }
 
@@ -55,7 +66,8 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
       })
       .then(r => console.warn('redirect', r));
   }
-  onAddProject(){
+
+  onAddProject() {
     this.router
       .navigate(['manage-project'], {
         relativeTo: this.route,
@@ -64,20 +76,36 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
   }
 
   onDeleteProject(project: ProjectModel) {
-    if (!window.confirm(`Are you really want to delete ${project.name} project?`)) {
-      return;
-    }
-    if (!project.id) {
-      return;
-    }
-    this.projectService.deleteProject(+project.id)
-      .subscribe(
-        () => {
-          const index = this.projects.indexOf(project);
-          this.projects.splice(index, 1);
-          this.dataSource.data = this.projects;
-        }
-      );
+    const dialogRef = this.dialog.open(ConfirmWindowComponent, {
+      data: {
+        title: 'Confirm',
+        text: `Are you really want to delete "${project.name}" project?`,
+        acceptBtnLabel: 'Yes',
+        declineBtnLabel: 'No'
+      } as ConfirmWindowDataModel,
+    });
+
+    dialogRef.afterClosed()
+      .pipe(
+        switchMap(result => (!!result && !!project.id
+            && this.projectService.deleteProject(+project.id)
+            || of(false)
+          )
+        ),
+        takeUntilDestroyed(this.destroyRef),)
+      .subscribe({
+          next: (res) => {
+            if (res === false) {
+              return;
+            }
+            const index = this.projects.indexOf(project);
+            this.projects.splice(index, 1);
+            this.dataSource.data = this.projects;
+          },
+          error: () => {
+            this.notificationServer.showErrorNotification('Error: delete project is failed!');
+          }
+        });
   }
 
 }

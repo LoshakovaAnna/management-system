@@ -1,9 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ProjectModel} from '@core/models';
-import {PROJECT_SERVICE} from '@core/services';
+import {NotificationServer, PROJECT_SERVICE} from '@core/services';
 import {UrlPageEnum} from '@core/enums';
 
 
@@ -13,6 +14,8 @@ import {UrlPageEnum} from '@core/enums';
   styleUrls: ['./project-manage.component.scss'],
 })
 export class ProjectManageComponent implements OnInit {
+
+  destroyRef = inject(DestroyRef);
   projectService = inject(PROJECT_SERVICE);
 
   title = '';
@@ -25,7 +28,10 @@ export class ProjectManageComponent implements OnInit {
     description: new FormControl('', [Validators.required]),
   });
 
-  constructor(private router: Router) {
+  returnLink = [`/${UrlPageEnum.projects}`];
+
+  constructor(private router: Router,
+              private notificationServer: NotificationServer) {
     this.project = this.router.getCurrentNavigation()?.extras?.state?.['project'];
   }
 
@@ -37,8 +43,6 @@ export class ProjectManageComponent implements OnInit {
       this.projectForm.patchValue(this.project);
     }
     this.projectForm.get('id')?.disable();
-
-
   }
 
 
@@ -52,17 +56,18 @@ export class ProjectManageComponent implements OnInit {
     const req = this.isNewProject
       ? this.projectService.postProject(value as ProjectModel)
       : this.projectService.putProject(value as ProjectModel);
-    req.subscribe({
+    req
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
         next: () => {
-          console.log(value)
           this.router.navigateByUrl(`/${UrlPageEnum.projects}`);
         },
         error: (error) => {
-          console.log(error);
+          this.notificationServer.showErrorNotification('Error: send request is failed!');
         }
       }
     );
-
   }
+
 
 }

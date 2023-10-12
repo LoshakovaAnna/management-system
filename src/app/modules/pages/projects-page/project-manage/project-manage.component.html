@@ -2,12 +2,16 @@
   <div class="docs-primary-header">
     <h1>{{title}}</h1>
   </div>
-  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-    <mat-card class="">
-      <mat-card-content>
+  <div class="m-20">
+    <a mat-stroked-button  [routerLink]="returnLink">
+      <mat-icon> keyboard_double_arrow_left </mat-icon>Projects page</a>
+  </div>
 
-        <div class="row">
-          <div class="col fl-basis">
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="content-container">
+    <mat-card >
+      <mat-card-content>
+        <div class="flex-row">
+          <div class="col flex-basis">
             <mat-form-field class="full-width">
               <mat-label>Company name</mat-label>
               <input matInput placeholder="Enter company name..." formControlName="name">
@@ -20,7 +24,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
+        <div class="flex-row">
           <div class="col">
             <mat-form-field class="full-width">
               <mat-label>Company Description</mat-label>
@@ -30,7 +34,7 @@
           </div>
         </div>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="p-l-20">
         <button mat-raised-button color="primary" type="submit">Submit</button>
       </mat-card-actions>
     </mat-card>
