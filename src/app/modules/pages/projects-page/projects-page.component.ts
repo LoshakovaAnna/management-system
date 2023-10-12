@@ -7,7 +7,7 @@ import {MatTable, MatTableDataSource} from '@angular/material/table';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatDialog} from '@angular/material/dialog';
 
-import {NotificationServer, PROJECT_SERVICE} from '@core/services';
+import {NotificationService, PROJECT_SERVICE} from '@core/services';
 import {ConfirmWindowDataModel, ProjectModel} from '@core/models';
 import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
 
@@ -35,7 +35,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
   constructor(private router: Router,
               private route: ActivatedRoute,
               public dialog: MatDialog,
-              private notificationServer: NotificationServer) {
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -53,7 +53,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
             this.dataSource.sort = this.sort;
           },
           error: () => {
-            this.notificationServer.showErrorNotification('Error: load projects list is failed!');
+            this.notificationService.showErrorNotification('Error: load projects list is failed!');
           },
         });
   }
@@ -103,7 +103,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
             this.dataSource.data = this.projects;
           },
           error: () => {
-            this.notificationServer.showErrorNotification('Error: delete project is failed!');
+            this.notificationService.showErrorNotification('Error: delete project is failed!');
           }
         });
   }

@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ProjectModel} from '@core/models';
-import {NotificationServer, PROJECT_SERVICE} from '@core/services';
+import {NotificationService, PROJECT_SERVICE} from '@core/services';
 import {UrlPageEnum} from '@core/enums';
 
 
@@ -31,7 +31,7 @@ export class ProjectManageComponent implements OnInit {
   returnLink = [`/${UrlPageEnum.projects}`];
 
   constructor(private router: Router,
-              private notificationServer: NotificationServer) {
+              private notificationService: NotificationService) {
     this.project = this.router.getCurrentNavigation()?.extras?.state?.['project'];
   }
 
@@ -63,7 +63,7 @@ export class ProjectManageComponent implements OnInit {
           this.router.navigateByUrl(`/${UrlPageEnum.projects}`);
         },
         error: (error) => {
-          this.notificationServer.showErrorNotification('Error: send request is failed!');
+          this.notificationService.showErrorNotification('Error: send request is failed!');
         }
       }
     );

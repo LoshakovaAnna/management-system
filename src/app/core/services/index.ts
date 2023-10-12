@@ -1,4 +1,4 @@
 export * from './project'
 
 export * from './database.service';
-export * from './notification.server';
+export * from './notification.service';
