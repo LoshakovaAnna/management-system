@@ -1,7 +1,7 @@
 import Dexie, {Table} from 'dexie';
 import {Injectable} from '@angular/core';
 
-import {ProjectModel} from '@core/models';
+import {ProjectModel, TaskModel} from '@core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +9,13 @@ import {ProjectModel} from '@core/models';
 export class DatabaseService extends Dexie {
 
   projectItems!: Table<ProjectModel, number>;
+  taskItems!: Table<TaskModel, number>;
 
   constructor() {
     super('projectsDB');
-    this.version(1).stores({
+    this.version(2).stores({
       projectItems: '++id',
+      taskItems:  '++id',
     });
   }
 
