@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 
-import {PROJECT_SERVICE, ProjectService} from '@core/services';
+import {PROJECT_SERVICE, ProjectService, TASK_SERVICE, TaskService} from '@core/services';
 
 
 @NgModule({
@@ -13,7 +13,7 @@ export class CoreModule {
       ngModule: CoreModule,
       providers: [
         {provide: PROJECT_SERVICE, useClass: ProjectService},
-
+        {provide: TASK_SERVICE, useClass: TaskService},
       ]
     };
   }

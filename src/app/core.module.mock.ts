@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule, Optional, SkipSelf} from '@angular/core';
 
-import {PROJECT_SERVICE, ProjectMockService} from '@core/services';
+import {PROJECT_SERVICE, ProjectMockService, TASK_SERVICE, TaskMockService} from '@core/services';
 
 
 @NgModule({
@@ -14,6 +14,7 @@ export class CoreModuleMock {
       ngModule: CoreModuleMock,
       providers: [
         {provide: PROJECT_SERVICE, useClass: ProjectMockService},
+        {provide: TASK_SERVICE, useClass: TaskMockService},
        ]
     };
   }
