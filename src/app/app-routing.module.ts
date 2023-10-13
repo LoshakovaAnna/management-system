@@ -24,6 +24,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/pages/tasks-page/tasks-page.module')
       .then(mod => mod.TasksPageModule),
   },
+  {
+    path: UrlPageEnum.employees,
+    loadChildren: () => import('./modules/pages/employees-page/employees-page.module')
+      .then(mod => mod.EmployeesPageModule),
+  },
 ];
 
 @NgModule({
