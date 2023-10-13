@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-import {EMPLOYEE_SERVICE, NotificationService} from '@core/services';
+import {EMPLOYEE_SERVICE, NotificationService, SpinnerService} from '@core/services';
 import {EmployeeModel} from '@core/models';
 import {UrlPageEnum} from '@core/enums';
 
@@ -17,6 +17,7 @@ export class EmployeeManageComponent implements OnInit {
 
   destroyRef = inject(DestroyRef);
   employeeService = inject(EMPLOYEE_SERVICE);
+  spinnerService = inject(SpinnerService);
 
   title = '';
   isNewEmployee: boolean = true;
@@ -56,6 +57,7 @@ export class EmployeeManageComponent implements OnInit {
       delete value.id;
     }
 
+    this.spinnerService.showSpinner();
     const req = this.isNewEmployee
       ? this.employeeService.postEmployee(value as EmployeeModel)
       : this.employeeService.putEmployee(value as EmployeeModel);
@@ -67,7 +69,8 @@ export class EmployeeManageComponent implements OnInit {
           },
           error: (error) => {
             this.notificationService.showErrorNotification('Error: send request is failed!');
-          }
+          },
+          complete: () => this.spinnerService.hideSpinner()
         }
       );
   }

@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ProjectModel} from '@core/models';
-import {NotificationService, PROJECT_SERVICE} from '@core/services';
+import {NotificationService, PROJECT_SERVICE, SpinnerService} from '@core/services';
 
 @Component({
   selector: 'app-project-manage',
@@ -16,6 +16,7 @@ export class ProjectManageComponent implements OnInit {
 
   destroyRef = inject(DestroyRef);
   projectService = inject(PROJECT_SERVICE);
+  spinnerService = inject(SpinnerService);
 
   title = '';
   isNewProject: boolean = true;
@@ -51,6 +52,7 @@ export class ProjectManageComponent implements OnInit {
       delete value.id;
     }
 
+    this.spinnerService.showSpinner();
     const req = this.isNewProject
       ? this.projectService.postProject(value as ProjectModel)
       : this.projectService.putProject(value as ProjectModel);
@@ -62,7 +64,8 @@ export class ProjectManageComponent implements OnInit {
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: send request is failed!');
-        }
+        },
+        complete: () => this.spinnerService.hideSpinner()
       });
   }
 

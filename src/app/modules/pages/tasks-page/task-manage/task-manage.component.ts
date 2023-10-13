@@ -1,14 +1,15 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import * as moment from 'moment';
 import {cloneDeep} from 'lodash';
+import {first, forkJoin} from 'rxjs';
 
 import {UrlPageEnum} from '@core/enums';
 import {EmployeeModel, ProjectModel, TaskModel} from '@core/models';
 import {DATE_FORMAT} from '@consts/date.const';
-import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, TASK_SERVICE} from '@core/services';
+import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
 
 @Component({
   selector: 'app-task-manage',
@@ -22,6 +23,7 @@ export class TaskManageComponent implements OnInit {
   taskService = inject(TASK_SERVICE);
   projectService = inject(PROJECT_SERVICE);
   employeeService = inject(EMPLOYEE_SERVICE);
+  spinnerService = inject(SpinnerService);
 
   projects: ProjectModel[] = [];
   employees: EmployeeModel[] = [];
@@ -73,29 +75,22 @@ export class TaskManageComponent implements OnInit {
     }
     this.taskForm.get('id')?.disable();
 
+    this.spinnerService.showSpinner();
 
-    this.projectService.getProjects()
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    forkJoin({
+      projects: this.projectService.getProjects(),
+      employees: this.employeeService.getEmployees()
+    })
+      .pipe(first(), takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          this.projects = data;
+          [this.projects, this.employees] = [data.projects, data.employees];
           this.cdRef.markForCheck();
         },
         error: () => {
-          this.notificationService.showErrorNotification('Error: load projects list is failed!');
+          this.notificationService.showErrorNotification('Error: load options list is failed!');
         },
-      });
-
-    this.employeeService.getEmployees()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (data) => {
-          this.employees = data;
-          this.cdRef.markForCheck();
-        },
-        error: () => {
-          this.notificationService.showErrorNotification('Error: load projects list is failed!');
-        },
+        complete: () => this.spinnerService.hideSpinner()
       });
   }
 
@@ -115,20 +110,22 @@ export class TaskManageComponent implements OnInit {
     if (value.endDate) {
       value.endDate = (value.endDate as unknown as moment.Moment).format(DATE_FORMAT)
     }
+
+    this.spinnerService.showSpinner();
     const req = this.isNewTask
       ? this.taskService.postTask(value as TaskModel)
       : this.taskService.putTask(value as TaskModel);
     req
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(first(), takeUntilDestroyed(this.destroyRef))
       .subscribe({
-          next: () => {
-            this.toPrevPage();
-          },
-          error: () => {
-            this.notificationService.showErrorNotification('Error: send request is failed!');
-          }
-        }
-      );
+        next: () => {
+          this.toPrevPage();
+        },
+        error: () => {
+          this.notificationService.showErrorNotification('Error: send request is failed!');
+        },
+        complete: () => this.spinnerService.hideSpinner()
+      });
   }
 
   toPrevPage() {

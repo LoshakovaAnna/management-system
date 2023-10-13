@@ -11,6 +11,7 @@ import {NavbarComponent} from '@app/modules/navbar/navbar.component';
 import {environment} from '@env/environment';
 import {CoreModuleMock} from '@app/core.module.mock';
 import {CoreModule} from '@app/core.module';
+import {SpinnerComponent} from '@shared/modules';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {CoreModule} from '@app/core.module';
     BrowserAnimationsModule,
     NavbarComponent,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    SpinnerComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

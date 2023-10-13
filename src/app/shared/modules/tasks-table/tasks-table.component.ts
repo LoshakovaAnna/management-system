@@ -12,12 +12,12 @@ import {
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {map, of, switchMap} from 'rxjs';
+import {first, map, of, switchMap} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ConfirmWindowComponent, EntriesTableComponent} from '@shared/modules';
 import {ConfirmWindowDataModel, ProjectModel, TaskModel} from '@core/models';
-import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, TASK_SERVICE} from '@core/services';
+import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
 import {UrlPageEnum} from '@core/enums';
 
 @Component({
@@ -40,13 +40,14 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
   taskService = inject(TASK_SERVICE);
   projectService = inject(PROJECT_SERVICE);
   employeeService = inject(EMPLOYEE_SERVICE);
+  spinnerService = inject(SpinnerService);
 
   tasks!: TaskModel[];
 
   displayedColumns: string[] = ['id', 'status', 'title', 'projectName',
     'description', 'startDate', 'endDate', 'employeeFullName'];
   labels = {
-    id : 'Id',
+    id: 'Id',
     status: 'Status',
     title: 'Title',
     projectName: 'Project Name',
@@ -64,7 +65,9 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     let tasks: Array<TaskModel> = [];
-    let projects: Array<ProjectModel> = []
+    let projects: Array<ProjectModel> = [];
+
+    this.spinnerService.showSpinner();
     this.taskService.getTasks()
       .pipe(
         switchMap((data) => {
@@ -111,6 +114,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
           error: () => {
             this.notificationService.showErrorNotification('Error: load tasks list is failed!');
           },
+          complete: () => this.spinnerService.hideSpinner()
         });
   }
 
@@ -142,11 +146,14 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
 
     dialogRef.afterClosed()
       .pipe(
-        switchMap(result => (!!result && !!task.id
-          && this.taskService.deleteTask(+task.id)
-          || of(false))
-        ),
-        takeUntilDestroyed(this.destroyRef),)
+        switchMap(result => {
+          this.spinnerService.showSpinner();
+          return !!result && !!task.id && this.taskService.deleteTask(+task.id)
+          || of(false);
+        }),
+        first(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
         next: (res) => {
           if (res === false) {
@@ -159,7 +166,8 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: delete task is failed!');
-        }
+        },
+        complete: () => this.spinnerService.hideSpinner()
       });
   }
 }

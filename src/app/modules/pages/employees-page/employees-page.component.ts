@@ -10,9 +10,9 @@ import {
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {of, switchMap} from 'rxjs';
+import {first, of, switchMap, tap} from 'rxjs';
 
-import {EMPLOYEE_SERVICE, NotificationService,} from '@core/services';
+import {EMPLOYEE_SERVICE, NotificationService, SpinnerService,} from '@core/services';
 import {ConfirmWindowDataModel, EmployeeModel} from '@core/models';
 import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
 import {UrlPageEnum} from '@core/enums';
@@ -27,6 +27,7 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
 
   destroyRef = inject(DestroyRef);
   employeeService = inject(EMPLOYEE_SERVICE);
+  spinnerService = inject(SpinnerService);
 
   employees!: EmployeeModel[];
   displayedColumns: string[] = ['id', 'lastName', 'name', 'patronymic', 'title'];
@@ -41,8 +42,12 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.spinnerService.showSpinner();
     this.employeeService.getEmployees()
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        first(),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
         next: (data) => {
           this.employees = data;
@@ -51,6 +56,9 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
         error: () => {
           this.notificationService.showErrorNotification('Error: load employee list is failed!');
         },
+        complete: () => {
+          this.spinnerService.hideSpinner();
+        }
       });
   }
 
@@ -78,6 +86,7 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed()
       .pipe(
+        tap(()=> this.spinnerService.showSpinner()),
         switchMap(result => (!!result && !!employee.id
             && this.employeeService.deleteEmployee(+employee.id)
             || of(false)
@@ -96,7 +105,8 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: delete employee is failed!');
-        }
+        },
+        complete: () => this.spinnerService.hideSpinner()
       });
   }
 

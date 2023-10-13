@@ -7,12 +7,12 @@ import {
   inject,
   OnInit
 } from '@angular/core';
-import {of, switchMap} from 'rxjs';
+import {of, switchMap, tap} from 'rxjs';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatDialog} from '@angular/material/dialog';
 
-import {NotificationService, PROJECT_SERVICE} from '@core/services';
+import {NotificationService, PROJECT_SERVICE, SpinnerService} from '@core/services';
 import {ConfirmWindowDataModel, ProjectModel} from '@core/models';
 import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
 import {UrlPageEnum} from '@core/enums';
@@ -28,6 +28,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
 
   destroyRef = inject(DestroyRef);
   projectService = inject(PROJECT_SERVICE);
+  spinnerService = inject(SpinnerService);
 
   projects!: ProjectModel[];
   displayedColumns: string[] = ['id', 'name', 'description'];
@@ -42,6 +43,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.spinnerService.showSpinner();
     this.projectService.getProjects()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
@@ -52,6 +54,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
         error: () => {
           this.notificationService.showErrorNotification('Error: load projects list is failed!');
         },
+        complete: () => this.spinnerService.hideSpinner()
       });
   }
 
@@ -78,8 +81,10 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
       } as ConfirmWindowDataModel,
     });
 
+
     dialogRef.afterClosed()
       .pipe(
+        tap(() => this.spinnerService.showSpinner()),
         switchMap(result => (!!result && !!project.id
             && this.projectService.deleteProject(+project.id)
             || of(false)
@@ -98,7 +103,8 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: delete project is failed!');
-        }
+        },
+        complete: () => this.spinnerService.hideSpinner()
       });
   }
 
