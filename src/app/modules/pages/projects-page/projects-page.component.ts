@@ -1,4 +1,12 @@
-import {AfterViewInit, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit
+} from '@angular/core';
 import {of, switchMap} from 'rxjs';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -13,7 +21,8 @@ import {UrlPageEnum} from '@core/enums';
 @Component({
   selector: 'app-projects-page',
   templateUrl: './projects-page.component.html',
-  styleUrls: ['./projects-page.component.scss']
+  styleUrls: ['./projects-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsPageComponent implements OnInit, AfterViewInit {
 
@@ -25,7 +34,8 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -37,6 +47,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data) => {
           this.projects = data;
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: load projects list is failed!');
@@ -83,6 +94,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
           const index = this.projects.indexOf(project);
           this.projects.splice(index, 1);
           this.projects = [...this.projects];
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: delete project is failed!');

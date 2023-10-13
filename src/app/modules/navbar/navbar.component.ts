@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatListModule} from '@angular/material/list';
 import {RouterLink, RouterLinkActive} from '@angular/router';
@@ -16,7 +16,8 @@ import {UrlPageEnum} from '@core/enums';
     RouterLink,
     RouterLinkActive
   ],
-  standalone: true
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent {
   urlMap = UrlPageEnum;

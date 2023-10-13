@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 import {PageTitleComponent} from '@shared/modules';
@@ -9,6 +9,7 @@ import {PageTitleComponent} from '@shared/modules';
   styleUrls: ['./home-page.component.scss'],
   standalone: true,
   imports: [CommonModule, PageTitleComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent {
 

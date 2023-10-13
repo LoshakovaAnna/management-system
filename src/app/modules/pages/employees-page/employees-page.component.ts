@@ -1,4 +1,12 @@
-import {AfterViewInit, Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit
+} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -12,7 +20,8 @@ import {UrlPageEnum} from '@core/enums';
 @Component({
   selector: 'app-employees-page',
   templateUrl: './employees-page.component.html',
-  styleUrls: ['./employees-page.component.scss']
+  styleUrls: ['./employees-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeesPageComponent implements OnInit, AfterViewInit {
 
@@ -24,7 +33,8 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -36,6 +46,7 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (data) => {
           this.employees = data;
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: load employee list is failed!');
@@ -81,6 +92,7 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
           const index = this.employees.indexOf(employee);
           this.employees.splice(index, 1);
           this.employees = [...this.employees];
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: delete employee is failed!');

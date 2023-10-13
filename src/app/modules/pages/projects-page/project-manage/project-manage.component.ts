@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -10,6 +10,7 @@ import {NotificationService, PROJECT_SERVICE} from '@core/services';
   selector: 'app-project-manage',
   templateUrl: './project-manage.component.html',
   styleUrls: ['./project-manage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectManageComponent implements OnInit {
 

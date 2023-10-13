@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -10,7 +10,8 @@ import {UrlPageEnum} from '@core/enums';
 @Component({
   selector: 'app-employee-manage',
   templateUrl: './employee-manage.component.html',
-  styleUrls: ['./employee-manage.component.scss']
+  styleUrls: ['./employee-manage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmployeeManageComponent implements OnInit {
 

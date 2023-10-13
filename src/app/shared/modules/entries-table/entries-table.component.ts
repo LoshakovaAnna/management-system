@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -22,7 +23,8 @@ import {TaskModel} from '@core/models';
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatPaginatorModule, MatSortModule, MatTableModule],
   templateUrl: './entries-table.component.html',
-  styleUrls: ['./entries-table.component.scss']
+  styleUrls: ['./entries-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntriesTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

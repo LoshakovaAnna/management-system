@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
@@ -13,7 +13,8 @@ import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, TASK_SERVICE} fr
 @Component({
   selector: 'app-task-manage',
   templateUrl: './task-manage.component.html',
-  styleUrls: ['./task-manage.component.scss']
+  styleUrls: ['./task-manage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskManageComponent implements OnInit {
 
@@ -46,7 +47,8 @@ export class TaskManageComponent implements OnInit {
   returnLink = [`/${UrlPageEnum.tasks}`];
 
   constructor(private router: Router,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private cdRef: ChangeDetectorRef) {
     this.task = this.router.getCurrentNavigation()?.extras?.state?.['task'];
     this.project = this.router.getCurrentNavigation()?.extras?.state?.['project'];
   }
@@ -77,6 +79,7 @@ export class TaskManageComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.projects = data;
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: load projects list is failed!');
@@ -88,6 +91,7 @@ export class TaskManageComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.employees = data;
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: load projects list is failed!');

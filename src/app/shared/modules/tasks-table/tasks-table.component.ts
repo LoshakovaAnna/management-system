@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, DestroyRef, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -15,7 +25,8 @@ import {UrlPageEnum} from '@core/enums';
   standalone: true,
   imports: [CommonModule, EntriesTableComponent],
   templateUrl: './tasks-table.component.html',
-  styleUrls: ['./tasks-table.component.scss']
+  styleUrls: ['./tasks-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksTableComponent implements OnChanges, AfterViewInit {
   @Input() project?: ProjectModel;
@@ -47,7 +58,8 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
 
   constructor(private router: Router,
               public dialog: MatDialog,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private cdRef: ChangeDetectorRef) {
   }
 
   ngAfterViewInit(): void {
@@ -94,6 +106,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
         {
           next: (data) => {
             this.tasks = data;
+            this.cdRef.markForCheck();
           },
           error: () => {
             this.notificationService.showErrorNotification('Error: load tasks list is failed!');
@@ -142,6 +155,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
           const index = this.tasks.indexOf(task);
           this.tasks.splice(index, 1);
           this.tasks = [...this.tasks];
+          this.cdRef.markForCheck();
         },
         error: () => {
           this.notificationService.showErrorNotification('Error: delete task is failed!');

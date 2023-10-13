@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MAT_DIALOG_DATA, MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
@@ -11,7 +11,8 @@ import {ConfirmWindowDataModel} from '@core/models';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule],
   templateUrl: './confirm-window.component.html',
-  styleUrls: ['./confirm-window.component.scss']
+  styleUrls: ['./confirm-window.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmWindowComponent {
 
