@@ -16,7 +16,7 @@ import {TasksPageComponent} from './tasks-page.component';
 import {TaskManageComponent} from './task-manage/task-manage.component';
 import {FULL_DATE_WITH_DOTES} from '@consts/date.const';
 import {EmployeeFullNamePipe} from '@pipes/employee-full-name.pipe';
-import {TasksTableComponent} from '@shared/modules';
+import {TasksTableComponent, PageTitleComponent} from '@shared/modules';
 
 const routes: Routes = [
   {
@@ -47,6 +47,7 @@ const routes: Routes = [
     MatSelectModule,
     MatDatepickerModule,
     EmployeeFullNamePipe,
+    PageTitleComponent,
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},

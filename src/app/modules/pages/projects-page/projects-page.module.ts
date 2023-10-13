@@ -12,7 +12,7 @@ import {MatListModule} from '@angular/material/list';
 
 import {ProjectsPageComponent} from './projects-page.component';
 import {ProjectManageComponent} from './project-manage/project-manage.component';
-import {EntriesTableComponent, TasksTableComponent} from '@shared/modules';
+import {EntriesTableComponent, TasksTableComponent, PageTitleComponent} from '@shared/modules';
 
 
 const routes: Routes = [
@@ -44,6 +44,7 @@ const routes: Routes = [
     MatListModule,
     EntriesTableComponent,
     TasksTableComponent,
+    PageTitleComponent,
   ]
 })
 export class ProjectsPageModule {

@@ -12,7 +12,7 @@ import {MatSelectModule} from '@angular/material/select';
 
 import {EmployeesPageComponent} from './employees-page.component';
 import {EmployeeManageComponent} from './employee-manage/employee-manage.component';
-import {EntriesTableComponent} from '@shared/modules';
+import {EntriesTableComponent, PageTitleComponent} from '@shared/modules';
 
 
 const routes: Routes = [
@@ -44,6 +44,7 @@ const routes: Routes = [
     MatOptionModule,
     MatSelectModule,
     EntriesTableComponent,
+    PageTitleComponent,
   ]
 })
 export class EmployeesPageModule {

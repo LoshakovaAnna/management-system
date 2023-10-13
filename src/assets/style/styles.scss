@@ -5,20 +5,6 @@ body {
   background: $dark-gray;
 }
 
-.docs-primary-header {
-  padding-left: 20px;
-  background: $primary-color;
-
-  display: block;
-
-  h1 {
-    font-weight: 300;
-    margin: 0;
-    padding: 28px 0;
-    font-size: 20px;
-    color: #fff;
-  }
-}
 
 table.mat-mdc-table thead {
   background: $primary-color;

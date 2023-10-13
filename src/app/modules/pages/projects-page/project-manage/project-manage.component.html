@@ -1,7 +1,5 @@
 <main>
-  <div class="docs-primary-header">
-    <h1>{{title}}</h1>
-  </div>
+  <app-page-title [title]="title"/>
   <div class="m-20">
     <button mat-stroked-button (click)="toPrev()">
       <mat-icon> keyboard_double_arrow_left</mat-icon>
