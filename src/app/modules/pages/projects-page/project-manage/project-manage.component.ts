@@ -59,7 +59,7 @@ export class ProjectManageComponent implements OnInit {
         next: () => {
           this.toPrev();
         },
-        error: (error) => {
+        error: () => {
           this.notificationService.showErrorNotification('Error: send request is failed!');
         }
       });

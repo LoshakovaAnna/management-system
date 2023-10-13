@@ -34,6 +34,16 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
 
   displayedColumns: string[] = ['id', 'status', 'title', 'projectName',
     'description', 'startDate', 'endDate', 'employeeFullName'];
+  labels = {
+    id : 'Id',
+    status: 'Status',
+    title: 'Title',
+    projectName: 'Project Name',
+    description: 'Description',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+    employeeFullName: 'Employee',
+  };
 
   constructor(private router: Router,
               public dialog: MatDialog,

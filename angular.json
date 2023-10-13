@@ -64,6 +64,17 @@
             },
             "development": {
               "fileReplacements": [
+
+              ],
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "mock": {
+              "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.dev.ts"
@@ -86,6 +97,9 @@
               "browserTarget": "management-system:build:production"
             },
             "development": {
+              "browserTarget": "management-system:build:development"
+            },
+            "mock": {
               "browserTarget": "management-system:build:development"
             }
           },

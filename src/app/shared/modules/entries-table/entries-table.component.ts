@@ -30,6 +30,7 @@ export class EntriesTableComponent implements OnChanges, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<TaskModel>;
 
   @Input() displayedColumns: string[] = [];
+  @Input() columnLabels: { [key: string]: string } = {};
   @Input() entries: any[] = [];
   @Input() entryName: string = 'Entry';
 

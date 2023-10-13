@@ -120,7 +120,7 @@ export class TaskManageComponent implements OnInit {
           next: () => {
             this.toPrevPage();
           },
-          error: (error) => {
+          error: () => {
             this.notificationService.showErrorNotification('Error: send request is failed!');
           }
         }

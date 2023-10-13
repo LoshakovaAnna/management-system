@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, DestroyRef, inject, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {of, switchMap} from 'rxjs';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';

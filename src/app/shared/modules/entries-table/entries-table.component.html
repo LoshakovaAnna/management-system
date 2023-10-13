@@ -9,7 +9,7 @@
     <ng-container *ngFor="let column of displayedColumns">
       <ng-container [matColumnDef]="column">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="capitalize"
-        >{{column}}</th>
+        >{{columnLabels[column] || column}}</th>
         <td mat-cell *matCellDef="let row">{{row[column]}}</td>
       </ng-container>
     </ng-container>
