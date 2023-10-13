@@ -100,7 +100,7 @@
               "browserTarget": "management-system:build:development"
             },
             "mock": {
-              "browserTarget": "management-system:build:development"
+              "browserTarget": "management-system:build:mock"
             }
           },
           "defaultConfiguration": "development"

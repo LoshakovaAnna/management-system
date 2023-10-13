@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {from, Observable, switchMap} from 'rxjs';
+import {from, interval, Observable, switchMap, take} from 'rxjs';
 
 import {DatabaseService, ProjectServiceModel} from '@core/services';
 import {ProjectModel} from '@core/models';
@@ -13,8 +13,11 @@ export class ProjectMockService implements ProjectServiceModel {
   }
 
   getProjects(): Observable<Array<ProjectModel>> {
-    return from(this.dbService.projectItems.toArray());
-    // return of(PROJECTS_MOCK);
+    return interval(1000)
+      .pipe(
+        take(1),
+        switchMap(() => from(this.dbService.projectItems.toArray()))
+      );
   };
 
   getProjectById(id: number): Observable<ProjectModel | undefined> {
