@@ -5,10 +5,10 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import * as moment from 'moment';
 import {cloneDeep} from 'lodash';
 
-import {UrlPageEnum} from "@core/enums";
-import {ProjectModel, TaskFullModel, TaskModel} from "@core/models";
-import {DATE_FORMAT} from "@consts/date.const";
-import {NotificationService, PROJECT_SERVICE, TASK_SERVICE} from "@core/services";
+import {UrlPageEnum} from '@core/enums';
+import {EmployeeModel, ProjectModel, TaskModel} from '@core/models';
+import {DATE_FORMAT} from '@consts/date.const';
+import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, TASK_SERVICE} from '@core/services';
 
 @Component({
   selector: 'app-task-manage',
@@ -20,11 +20,15 @@ export class TaskManageComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   taskService = inject(TASK_SERVICE);
   projectService = inject(PROJECT_SERVICE);
-  projects!: ProjectModel[];
+  employeeService = inject(EMPLOYEE_SERVICE);
+
+  projects: ProjectModel[] = [];
+  employees: EmployeeModel[] = [];
 
   title = '';
   isNewTask: boolean = true;
   task!: TaskModel;
+  project!: ProjectModel;
 
   taskForm = new FormGroup({
     id: new FormControl(''),
@@ -34,6 +38,7 @@ export class TaskManageComponent implements OnInit {
     startDate: new FormControl('', [Validators.required]),
     endDate: new FormControl('',),
     projectId: new FormControl('', [Validators.required]),
+    employeeId: new FormControl('', [Validators.required]),
   });
   statuses = [
     'Not Started', 'In progress', 'Finished', 'Delay'
@@ -43,6 +48,7 @@ export class TaskManageComponent implements OnInit {
   constructor(private router: Router,
               private notificationService: NotificationService) {
     this.task = this.router.getCurrentNavigation()?.extras?.state?.['task'];
+    this.project = this.router.getCurrentNavigation()?.extras?.state?.['project'];
   }
 
   ngOnInit(): void {
@@ -58,19 +64,35 @@ export class TaskManageComponent implements OnInit {
       // @ts-ignore
       this.taskForm.patchValue(this.task);
     }
+    if (this.project) {
+      // @ts-ignore
+      this.taskForm.patchValue({projectId: this.project.id});
+      this.taskForm.get('projectId')?.disable();
+    }
     this.taskForm.get('id')?.disable();
 
 
     this.projectService.getProjects()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-          next: (data) => {
-            this.projects = data;
-          },
-          error: () => {
-            this.notificationService.showErrorNotification('Error: load projects list is failed!');
-          },
-        });
+        next: (data) => {
+          this.projects = data;
+        },
+        error: () => {
+          this.notificationService.showErrorNotification('Error: load projects list is failed!');
+        },
+      });
+
+    this.employeeService.getEmployees()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data) => {
+          this.employees = data;
+        },
+        error: () => {
+          this.notificationService.showErrorNotification('Error: load projects list is failed!');
+        },
+      });
   }
 
 
@@ -90,13 +112,13 @@ export class TaskManageComponent implements OnInit {
       value.endDate = (value.endDate as unknown as moment.Moment).format(DATE_FORMAT)
     }
     const req = this.isNewTask
-      ? this.taskService.postTask(value as unknown as TaskFullModel)
-      : this.taskService.putTask(value as unknown  as TaskFullModel);
+      ? this.taskService.postTask(value as TaskModel)
+      : this.taskService.putTask(value as TaskModel);
     req
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
           next: () => {
-            this.router.navigateByUrl(`/${UrlPageEnum.tasks}`);
+            this.toPrevPage();
           },
           error: (error) => {
             this.notificationService.showErrorNotification('Error: send request is failed!');
@@ -105,5 +127,7 @@ export class TaskManageComponent implements OnInit {
       );
   }
 
-
+  toPrevPage() {
+    history.back();
+  }
 }

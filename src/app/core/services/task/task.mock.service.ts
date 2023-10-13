@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {from, Observable, switchMap} from 'rxjs';
 
 import {TaskServiceModel} from './task.service.model';
-import {TaskFullModel, TaskModel} from '@core/models';
+import {TaskModel} from '@core/models';
 import {DatabaseService} from '@core/services';
 
 @Injectable({
@@ -23,13 +23,13 @@ export class TaskMockService implements TaskServiceModel {
     return from(this.dbService.taskItems.get(id));
   }
 
-  postTask(body: TaskFullModel): Observable<void | TaskModel> {
+  postTask(body: TaskModel): Observable<void | TaskModel> {
     return from(this.dbService.taskItems.add(body)).pipe(
       switchMap((v) => from(this.dbService.taskItems.get(v)))
     );
   };
 
-  putTask(body: TaskFullModel): Observable<any> {
+  putTask(body: TaskModel): Observable<any> {
     return from(this.dbService.taskItems.put(body));
   };
 

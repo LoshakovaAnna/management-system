@@ -15,6 +15,7 @@ import {MatSelectModule} from '@angular/material/select';
 
 import {EmployeesPageComponent} from './employees-page.component';
 import {EmployeeManageComponent} from './employee-manage/employee-manage.component';
+import {EntriesTableComponent} from '@shared/modules';
 
 
 const routes: Routes = [
@@ -38,9 +39,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     MatButtonModule,
     MatIconModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatTableModule,
     FormsModule,
     MatCardModule,
     MatFormFieldModule,
@@ -48,6 +46,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatOptionModule,
     MatSelectModule,
+    EntriesTableComponent,
   ]
 })
 export class EmployeesPageModule {

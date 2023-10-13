@@ -2,6 +2,10 @@ export enum UrlPageEnum {
   home = 'home',
   projects = 'projects',
   tasks = 'tasks',
-  employees = 'employees'
+  employees = 'employees',
+
+  manageTask = 'manage-task',
+  manageProject = 'manage-project',
+  manageEmployee = 'manage-employee'
 
 }

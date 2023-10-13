@@ -5,8 +5,6 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ProjectModel} from '@core/models';
 import {NotificationService, PROJECT_SERVICE} from '@core/services';
-import {UrlPageEnum} from '@core/enums';
-
 
 @Component({
   selector: 'app-project-manage',
@@ -28,7 +26,6 @@ export class ProjectManageComponent implements OnInit {
     description: new FormControl('', [Validators.required]),
   });
 
-  returnLink = [`/${UrlPageEnum.projects}`];
 
   constructor(private router: Router,
               private notificationService: NotificationService) {
@@ -60,14 +57,16 @@ export class ProjectManageComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.router.navigateByUrl(`/${UrlPageEnum.projects}`);
+          this.toPrev();
         },
         error: (error) => {
           this.notificationService.showErrorNotification('Error: send request is failed!');
         }
-      }
-    );
+      });
   }
 
+  toPrev(): void {
+    history.back();
+  }
 
 }
