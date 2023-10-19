@@ -1,5 +1,7 @@
 <mat-toolbar color="primary" class="relative">
-  <div class="pointer m-r-20" [routerLink]="urlMap.home">Management System </div>
+  <a [routerLink]="urlMap.home" class="flex">
+    <img class="logo" src="assets/img/logo.svg" alt="Management System ">
+  </a>
   <mat-nav-list>
     <a mat-list-item routerLinkActive="active" [routerLink]="urlMap.projects">Projects</a>
     <a mat-list-item routerLinkActive="active" [routerLink]="urlMap.tasks">Tasks</a>
