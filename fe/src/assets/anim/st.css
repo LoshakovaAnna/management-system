@@ -1,0 +1,351 @@
+@keyframes changeColor {
+  0% {
+    background-color: red;
+  }
+  25% {
+    background-color: yellow;
+  }
+  50% {
+    background-color: yellowgreen;
+  }
+  50% {
+    background-color: green;
+  }
+  100% {
+    background-color: red;
+  }
+}
+
+.element {
+  height: 120px;
+  width: 200px;
+  /*background: black ;*/
+  animation: changeColor 10s infinite;
+  /*animation-name: changeColor;*/
+  animation-duration: 5s;
+  animation-iteration-count: 3;
+  /*animation-timing-function: ease-in-out;*/
+  animation-delay: 3s;
+  /*
+    время задержки между моментом загрузки элемента в браузере и началом анимации*/
+
+  /*animation-name: changeColor;*/
+  /*animation-duration: 2s;*/
+  animation-timing-function: ease-out;
+  /*animation-delay: 0s;*/
+  animation-direction: alternate;
+  /*animation-iteration-count: infinite;*/
+  animation-fill-mode: none;
+  animation-play-state: running;
+}
+
+
+/*@keyframes slidein {*/
+/*  from {*/
+/*    margin-left: 100%;*/
+/*    width: 300%;*/
+/*  }*/
+
+/*  to {*/
+/*    margin-left: 0%;*/
+/*    width: 100%;*/
+/*  }*/
+/*}*/
+
+.slide {
+  animation-duration: 3s;
+  animation-name: slidein;
+  animation-delay: 3s;
+  animation-iteration-count: 4;
+  /*animation-timing-function*/
+  /*animation-direction*/
+  /*animation-fill-mode: backwards | both | forwards | none;*/
+  /*animation-play-state: paused | running;*/
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 100%;
+    width: 300%;
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+
+  75% {
+    font-size: 300%;
+    margin-left: 25%;
+    width: 150%;
+  }
+}
+
+.anim-move {
+  width: 200px;
+  height: 200px;
+  border: 3px solid pink;
+  animation-name: move-sq;
+  animation-duration: 10s;
+  animation-delay: 2s;
+  position: absolute;
+  animation-iteration-count: infinite;
+
+}
+
+@keyframes move-sq {
+  0% {
+    top: 0;
+    left: 0;
+  }
+  25% {
+    top: 0;
+    left: 200px;
+  }
+  50% {
+    top: 200px;
+    left: 200px;
+  }
+  75% {
+    top: 200px;
+    left: 0;
+  }
+  100% {
+    top: 0;
+    left: 0;
+  }
+}
+
+.anim-move {
+  /* Keyword values */
+  animation-timing-function: ease;
+  /*animation-timing-function: ease-in;*/
+  /*animation-timing-function: ease-out;*/
+  /*animation-timing-function: ease-in-out;*/
+  /*animation-timing-function: linear;*/ /*самый плавный*/
+
+  animation-timing-function: step-start; /*только фрэймы. как кадры. без переходов*/
+  /*animation-timing-function: step-end;*/
+
+  /*!* Function values *!*/
+  /*animation-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);*/
+  /*animation-timing-function: steps(4, end);*/
+
+  /*!* Steps Function keywords *!*/
+  /*animation-timing-function: steps(4, jump-start);*/
+  /*animation-timing-function: steps(10, jump-end);*/
+  /*animation-timing-function: steps(20, jump-none);*/
+  /*animation-timing-function: steps(5, jump-both);*/
+  /*animation-timing-function: steps(6, start);*/
+  /*animation-timing-function: steps(8, end);*/
+
+  /*!* Multiple animations *!*/
+  /*animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1, 0.1);*/
+
+  /*!* Global values *!*/
+  /*animation-timing-function: inherit;*/
+  /*animation-timing-function: initial;*/
+  /*animation-timing-function: unset;*/
+}
+
+.icon {
+  border: 5px solid green;
+}
+
+.icon:hover {
+  filter: blur(5px);
+  animation: 3s infinite pulse;
+  animation-name: move-sq, pulse;
+  animation-composition: add;
+}
+
+@keyframes pulse {
+  0% {
+    filter: blur(10px);
+  }
+  100% {
+    filter: blur(20px);
+  }
+}
+
+.content-box {
+  column-count: 3;
+}
+
+body {
+  padding: 50px;
+}
+
+.box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
+  row-gap: 50px;
+}
+
+.svg {
+  width: 400px;
+  height: 300px;
+  border: 1px solid black;
+}
+
+.text {
+  font-size: 16px;
+  fill: blue;
+  color: black;
+}
+
+.rect1 {
+  stroke: #e390e3;
+  stroke-width: 10;
+  fill: none;
+  stroke-dasharray: 50 700;
+  /*stroke-dashoffset: 700;*/
+  /*transition: stroke-dashoffset 3s;*/
+  animation: strokef;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-direction: reverse;
+  animation-timing-function: linear;
+}
+
+/*.svg:hover .rect1 {*/
+/*  stroke-dashoffset: 1;*/
+/*}*/
+@keyframes strokef {
+  0% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 700;
+  }
+
+}
+
+.rect2 {
+  stroke: yellowgreen;
+  stroke-width: 5;
+  animation-direction: normal;
+}
+
+.circle-anim {
+  /*transition: stroke-dashoffset 3s;*/
+  animation: circle2;
+  animation-duration: 30s;
+  animation-iteration-count: infinite;
+  animation-direction: reverse;
+  animation-timing-function: linear;
+}
+
+@keyframes circle2 {
+  0% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: 314;
+  }
+
+}
+
+.circle-anim2 {
+  animation: fill-change;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+
+}
+
+@keyframes fill-change {
+  0% {
+    fill: #cf1221;
+  }
+  50% {
+    fill: rgba(207, 18, 33, 0.22);
+  }
+  100% {
+    fill: #cf1221;
+  }
+}
+
+.heart {
+  width: 300px;
+  height: 300px;
+  fill: none;
+  overflow: visible;
+  transition: stroke-dashoffse 10s ease-in;
+
+  .heart-item {
+    stroke-width: 5px;
+    stroke: red;
+    stroke-dasharray: 1530;
+    stroke-dashoffset: 1530;
+    transition: all 3s ease-in;
+  }
+
+}
+
+.heart:hover .heart-item {
+  stroke-dashoffset: 0
+}
+
+.forms {
+  clip-path: polygon(50% 0%, 61% 26%, 70% 51%, 79% 40%, 92% 83%, 11% 83%, 10% 34%, 22% 40%, 32% 26%, 43% 35%);
+  clip-path: circle();
+  clip-path: ellipse();
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+/*.cloud-svg, .heart {*/
+/*  height: 200px*/
+/*}*/
+.img-fruit {
+
+  /*width: 525px;*/
+  height: 493px;
+
+  clip-path: url(#cloud-clip-path);
+}
+.img-fruit:hover {
+
+  clip-path: url(#heart-clip-path);
+}
+
+.icon-cont {
+  background: pink;
+}
+content--link:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 268.8px;
+  height: 268.8px;
+  top: -22.4px;
+  left: -22.4px;
+  border-radius: 50%;
+  transition: inherit;
+}
+.mlkml {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.mlkml {
+  box-shadow: -14.56px -14.56px 0 rgba(255,0,0,.3),
+  -20.384px 0 0 rgba(255,170,0,.3),
+    -14.56px 14.56px 0 rgba(170,255,0,.3),
+  0 20.384px 0 rgba(0,255,0,.3),
+  14.56px 14.56px 0 rgba(0,255,170,.3),
+  20.384px 0 0 rgba(0,170,255,.3),
+  14.56px -14.56px 0 rgba(0,0,255,.3),
+  0 -20.384px 0 rgba(170,0,255,.3);
+  animation: rotate 20s linear infinite;
+
+}
+@keyframes rotate {
+
+  100% {
+    transform: rotate(1turn);
+  }
+}

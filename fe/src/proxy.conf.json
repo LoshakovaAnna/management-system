@@ -1,0 +1,7 @@
+{
+  "/api/*": {
+    "target": "http://ATWIE1AS17:8045/",
+    "secure": false,
+    "loglevel": "debug"
+  }
+}

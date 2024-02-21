@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>grad</title>
+</head>
+<body>
+
+<!--<style>-->
+<!--  svg {-->
+
+<!--    display: block;-->
+
+<!--    width: 600px;-->
+<!--    height: auto;-->
+<!--    margin: auto;-->
+<!--    font-size: 100px;-->
+<!--    font-family: 'Monoton', cursive;-->
+<!--  }-->
+<!--</style>-->
+
+
+<!--<svg viewBox="0 0 830 180">-->
+<!--  <linearGradient id="gradient">-->
+<!--    <stop offset="0" stop-color="gold"></stop>-->
+<!--    <stop offset="30%" stop-color="red"></stop>-->
+<!--    <stop offset="60%" stop-color="darkviolet"></stop>-->
+<!--    <stop offset="100%" stop-color="deepskyblue"></stop>-->
+<!--  </linearGradient>-->
+
+<!--  <symbol id="text">-->
+<!--    <text x="50%" y="50%"-->
+<!--          dy=".35em"-->
+<!--          text-anchor="middle"-->
+<!--    >&bull; Gradient &bull;</text>-->
+<!--  </symbol>-->
+
+<!--  <mask id="mask-top">-->
+<!--    <rect width="100%" height="50%"-->
+<!--          x="0" y="0%"-->
+<!--          fill="white"></rect>-->
+<!--  </mask>-->
+
+<!--  <mask id="mask-bottom">-->
+<!--    <rect width="96%" height="96%"-->
+<!--          x="2%" y="2%"-->
+<!--          rx="20"-->
+<!--          fill="white" stroke="#999"-->
+<!--          stroke-width="5"></rect>-->
+<!--    <rect width="100%" height="50%"-->
+<!--          x="0" y="0%"-->
+<!--          fill="black"></rect>-->
+<!--    <use xlink:href="#text"-->
+<!--         stroke="none"></use>-->
+<!--  </mask>-->
+
+<!--  <g fill="url(#gradient)"-->
+<!--     stroke="url(#gradient)"-->
+<!--     stroke-width="5">-->
+<!--    <g mask="url(#mask-top)">-->
+<!--      <rect width="96%" height="96%"-->
+<!--            x="2%" y="2%"-->
+<!--            rx="20"-->
+<!--            fill="none"></rect>-->
+<!--      <use xlink:href="#text"-->
+<!--           fill="none" stroke-width="2"></use>-->
+<!--    </g>-->
+<!--    <g mask="url(#mask-bottom)">-->
+<!--      <rect width="96%" height="96%"-->
+<!--            x="2%" y="2%"-->
+<!--            rx="20"></rect>-->
+<!--    </g>-->
+<!--  </g>-->
+<!--  <use xlink:href="#text"-->
+<!--       fill="transparent"-->
+<!--       stroke="none"></use>-->
+
+<!--</svg>-->
+
+<svg viewBox="0 0 600 200">
+  <linearGradient id="grad--linear-2">
+    <stop offset="0%" stop-color="crimson"
+          class="stop-1"/>
+    <stop offset="50%" stop-color="gold"
+          class="stop-2"/>
+    <stop offset="100%" stop-color="teal"
+          class="stop-3"/>
+  </linearGradient>
+
+  <rect fill="url(#grad--linear-2)"
+        width="100%" height="100%"/>
+</svg>
+
+<style>
+
+
+
+  #grad--linear-2 stop {
+    animation: colors 24s infinite;
+  }
+
+
+  #grad--linear-2  .stop-1 {
+
+  }
+  #grad--linear-2  .stop-2 {
+    animation-delay: -6s;
+  }
+  #grad--linear-2  .stop-3 {
+    animation-delay: -12s;
+  }
+
+  @keyframes colors {
+    15% {
+      stop-color: crimson;
+    }
+    30% {
+      stop-color: gold;
+    }
+    45% {
+      stop-color: teal;
+    }
+    60% {
+      stop-color: yellowgreen;
+    }
+    75% {
+      stop-color: orangered;
+    }
+    90% {
+      stop-color: purple;
+    }
+  }
+</style>
+</body>
+</html>
