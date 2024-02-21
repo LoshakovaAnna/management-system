@@ -1,5 +1,7 @@
+const mongoose = require('mongoose');
 var customParseFormat = require('dayjs/plugin/customParseFormat');
 const dayjs = require('dayjs');
+
 const TaskModel = require('../models/task-model');
 const {transformToSendFormat} = require('../utils');
 
@@ -10,15 +12,50 @@ const getDate = (d) => {
 };
 
 const getTasks = async (req, res) => {
-    let tasks = req.params.id
-        ? TaskModel.findById(req.params.id)
-            .then(task => (transformToSendFormat(task)))
-        : TaskModel.find()
-            .then(tasks => (tasks.map(proj => (transformToSendFormat(proj)))));
-    tasks
-        .then(data => (res.send(data)))
-        .catch(() => {
-            console.log(`Find task(s) is failed, obj=${req.params.id}`);
+    const aggregateConditions = [];
+    try {
+        if (req.params.id) {
+            const id1 = new mongoose.Types.ObjectId(req.params.id);
+            aggregateConditions.push({'$match': {'_id': {'$in': [id1]}}});
+        }
+    } catch (e) {
+        return res.status(400).send({message: 'invalid id'})
+    }
+
+    aggregateConditions.push(
+        {
+            $lookup:
+                {from: 'projects', localField: 'projectId', foreignField: '_id', as: 'proj'}
+        },
+        {$unwind: '$proj'},
+        {
+            $lookup:
+                {from: 'employees', localField: 'employeeId', foreignField: '_id', as: 'empl'}
+        },
+        {$unwind: '$empl'},
+        {
+            $project: {
+                '_id': 1,
+                'title': 1,
+                'description': 1,
+                'status': 1,
+                'startDate': 1,
+                'endDate': 1,
+                'employeeId': 1,
+                'projectId': 1,
+                'projectName': '$proj.name',
+                'employee': '$empl'
+            }
+        }
+    );
+    TaskModel.aggregate(aggregateConditions)
+        .then(tasks => {
+            const data = tasks.map(proj => (transformToSendFormat(proj)));
+            return res.send(req.params.id ? data[0] : data)
+        })
+        .catch((e) => {
+            console.log(e);
+            console.log(`find task(s) is failed`);
             res.status(500).send({message: 'Find task(s) is failed.'});
         });
 }

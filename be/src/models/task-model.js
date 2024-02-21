@@ -20,10 +20,8 @@ const taskSchema = new mongoose.Schema({
     },
     startDate: Date,
     endDate: Date,
-    projectId: String, //mongoose.Types.ObjectId,
-    // projectName?: string;
-    employeeId: String//mongoose.ObjectIds,
-    // employeeFullName?: string;
+    projectId:  mongoose.ObjectId,
+    employeeId: mongoose.ObjectId,
 });
 
 module.exports = mongoose.model('Task', taskSchema);
