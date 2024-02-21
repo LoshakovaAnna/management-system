@@ -10,7 +10,7 @@ import {environment} from '@env/environment';
   providedIn: 'root'
 })
 export class ProjectService implements ProjectServiceModel{
-  private url: string = environment.apiUrl  + '/api/projects';
+  private url: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -25,10 +25,10 @@ export class ProjectService implements ProjectServiceModel{
     return this.http.post<ProjectModel>(`${this.url}/api/v1/projects`, body);
   }
   putProject(body: ProjectModel): Observable<void>{
-    return this.http.put<void>(`${this.url}/api/v1/projects/`, body);
+    return this.http.put<void>(`${this.url}/api/v1/projects/${body.id}`, body);
   }
 
-  deleteProject(id: number): Observable<void>{
+  deleteProject(id: string): Observable<void>{
     return this.http.delete<void>(`${this.url}/api/v1/projects/${id}`);
   }
 }

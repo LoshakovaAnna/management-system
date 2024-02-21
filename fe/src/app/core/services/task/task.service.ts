@@ -10,7 +10,7 @@ import {TaskServiceModel} from './task.service.model';
   providedIn: 'root'
 })
 export class TaskService implements TaskServiceModel {
-  private url: string = environment.apiUrl + '/api/projects';
+  private url: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {
   }
@@ -28,10 +28,10 @@ export class TaskService implements TaskServiceModel {
   }
 
   putTask(body: TaskModel): Observable<void>{
-    return this.http.put<void>(`${this.url}/api/v1/tasks/`, body);
+    return this.http.put<void>(`${this.url}/api/v1/tasks/${body.id}`, body);
   }
 
-  deleteTask(id: number): Observable<void>{
+  deleteTask(id: string): Observable<void>{
     return this.http.delete<void>(`${this.url}/api/v1/tasks/${id}`);
   }
 }

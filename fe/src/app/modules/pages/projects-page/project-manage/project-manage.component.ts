@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ProjectModel} from '@core/models';
-import {NotificationService, PROJECT_SERVICE, SpinnerService} from '@core/services';
+import {PROJECT_SERVICE, SpinnerService} from '@core/services';
 
 @Component({
   selector: 'app-project-manage',
@@ -29,8 +29,7 @@ export class ProjectManageComponent implements OnInit {
   });
 
 
-  constructor(private router: Router,
-              private notificationService: NotificationService) {
+  constructor(private router: Router) {
     this.project = this.router.getCurrentNavigation()?.extras?.state?.['project'];
   }
 
@@ -62,10 +61,9 @@ export class ProjectManageComponent implements OnInit {
         next: () => {
           this.toPrev();
         },
-        error: () => {
-          this.notificationService.showErrorNotification('Error: send request is failed!');
-        },
-        complete: () => this.spinnerService.hideSpinner()
+      })
+      .add(() => {
+        this.spinnerService.hideSpinner();
       });
   }
 

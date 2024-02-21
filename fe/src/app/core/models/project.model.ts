@@ -1,5 +1,5 @@
 export interface  ProjectModel {
-  id: number | string | null;
+  id?: string;
   name: string;
   description: string;
 }

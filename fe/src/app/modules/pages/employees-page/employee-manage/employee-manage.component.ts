@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
-import {EMPLOYEE_SERVICE, NotificationService, SpinnerService} from '@core/services';
+import {EMPLOYEE_SERVICE, SpinnerService} from '@core/services';
 import {EmployeeModel} from '@core/models';
 import {UrlPageEnum} from '@core/enums';
 
@@ -34,8 +34,7 @@ export class EmployeeManageComponent implements OnInit {
 
   returnLink = [`/${UrlPageEnum.employees}`];
 
-  constructor(private router: Router,
-              private notificationService: NotificationService) {
+  constructor(private router: Router) {
     this.employee = this.router.getCurrentNavigation()?.extras?.state?.['employee'];
   }
 
@@ -64,14 +63,10 @@ export class EmployeeManageComponent implements OnInit {
     req
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-          next: () => {
-            this.router.navigateByUrl(`/${UrlPageEnum.employees}`);
-          },
-          error: (error) => {
-            this.notificationService.showErrorNotification('Error: send request is failed!');
-          },
+        next: () => {
+          this.router.navigateByUrl(`/${UrlPageEnum.employees}`);
         }
-      )
+      })
       .add(() => {
         this.spinnerService.hideSpinner();
       });

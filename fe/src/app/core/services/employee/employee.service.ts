@@ -28,7 +28,7 @@ export class EmployeeService implements EmployeeServiceModel{
     return this.http.put<void>(`${this.url}/api/v1/employees/${body.id}`, body);
   }
 
-  deleteEmployee(id: number): Observable<void>{
+  deleteEmployee(id: string): Observable<void>{
     return this.http.delete<void>(`${this.url}/api/v1/employees/${id}`);
   }
 }

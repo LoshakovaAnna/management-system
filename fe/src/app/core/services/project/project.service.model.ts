@@ -13,5 +13,5 @@ export interface ProjectServiceModel {
   postProject(body: ProjectModel): Observable<void | ProjectModel>;
   putProject(body: ProjectModel): Observable<void>;
 
-  deleteProject(id: number): Observable<void>;
+  deleteProject(id: string): Observable<void>;
 }

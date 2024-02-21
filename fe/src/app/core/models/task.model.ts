@@ -1,7 +1,7 @@
 import {Moment} from "moment";
 
 export interface TaskModel {
-  id?: number;
+  id?: string;
   status: TaskStatus;
   title: string;
   description: string;

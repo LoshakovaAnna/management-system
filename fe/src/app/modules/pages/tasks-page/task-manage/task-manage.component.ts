@@ -9,7 +9,7 @@ import {first, forkJoin} from 'rxjs';
 import {UrlPageEnum} from '@core/enums';
 import {EmployeeModel, ProjectModel, TaskModel} from '@core/models';
 import {DATE_FORMAT} from '@consts/date.const';
-import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
+import {EMPLOYEE_SERVICE, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
 
 @Component({
   selector: 'app-task-manage',
@@ -49,7 +49,6 @@ export class TaskManageComponent implements OnInit {
   returnLink = [`/${UrlPageEnum.tasks}`];
 
   constructor(private router: Router,
-              private notificationService: NotificationService,
               private cdRef: ChangeDetectorRef) {
     this.task = this.router.getCurrentNavigation()?.extras?.state?.['task'];
     this.project = this.router.getCurrentNavigation()?.extras?.state?.['project'];
@@ -60,10 +59,10 @@ export class TaskManageComponent implements OnInit {
     this.title = this.isNewTask ? ' Create Task' : 'Edit Task';
     if (this.task) {
       if (this.task.startDate) {
-        this.task.startDate = moment(this.task.startDate, DATE_FORMAT);
+        this.task.startDate = moment(this.task.startDate);
       }
       if (this.task.endDate) {
-        this.task.endDate = moment(this.task.endDate, DATE_FORMAT);
+        this.task.endDate = moment(this.task.endDate);
       }
       // @ts-ignore
       this.taskForm.patchValue(this.task);
@@ -87,11 +86,10 @@ export class TaskManageComponent implements OnInit {
           [this.projects, this.employees] = [data.projects, data.employees];
           this.cdRef.markForCheck();
         },
-        () => {
-          this.notificationService.showErrorNotification('Error: load options list is failed!');
-        },
-        () => this.spinnerService.hideSpinner()
-      );
+      )
+      .add(() => {
+      this.spinnerService.hideSpinner();
+    });
   }
 
 
@@ -121,10 +119,9 @@ export class TaskManageComponent implements OnInit {
         next: () => {
           this.toPrevPage();
         },
-        error: () => {
-          this.notificationService.showErrorNotification('Error: send request is failed!');
-        },
-        complete: () => this.spinnerService.hideSpinner()
+      })
+      .add(() => {
+        this.spinnerService.hideSpinner();
       });
   }
 

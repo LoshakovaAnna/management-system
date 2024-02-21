@@ -9,13 +9,14 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {NotificationService} from "@services/notification.service";
 
-// import {VDMA_USER} from '../models';
 
 @Injectable()
 export class ReqInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+              private notificationService: NotificationService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -25,22 +26,14 @@ export class ReqInterceptor implements HttpInterceptor {
     // req = req.clone({withCredentials: true});
 
     return next.handle(req)
-     /* .pipe(tap(() => {
-      },
-      (err: any) => {
-        if (err instanceof HttpErrorResponse) {
-          if (err.status !== 401 && !req.url.includes('GetCurrentUser')) {
-            return;
+      .pipe(tap(() => {
+        },
+        (err: any) => {
+          if (err instanceof HttpErrorResponse) {
+
+            console.log(err)
+            this.notificationService.showErrorNotification(err.error.message || err.message);
           }
-          if (!window.location.href.includes('login')) {
-            VDMA_USER.name = null;
-            this.router.navigate(['login'], {
-              state: {
-                previousUrl: window.location.hash.substr(2)
-              }
-            });
-          }
-        }
-      }));*/
+        }));
   }
 }

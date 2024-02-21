@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatDialog} from '@angular/material/dialog';
 
-import {NotificationService, PROJECT_SERVICE, SpinnerService} from '@core/services';
+import {PROJECT_SERVICE, SpinnerService} from '@core/services';
 import {ConfirmWindowDataModel, ProjectModel} from '@core/models';
 import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
 import {UrlPageEnum} from '@core/enums';
@@ -35,7 +35,6 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
 
   constructor(private router: Router,
               public dialog: MatDialog,
-              private notificationService: NotificationService,
               private cdRef: ChangeDetectorRef) {
   }
 
@@ -51,10 +50,9 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
           this.projects = data;
           this.cdRef.markForCheck();
         },
-        error: () => {
-          this.notificationService.showErrorNotification('Error: load projects list is failed!');
-        },
-        complete: () => this.spinnerService.hideSpinner()
+      })
+      .add(() => {
+        this.spinnerService.hideSpinner();
       });
   }
 
@@ -86,7 +84,7 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
       .pipe(
         tap(() => this.spinnerService.showSpinner()),
         switchMap(result => (!!result && !!project.id
-            && this.projectService.deleteProject(+project.id)
+            && this.projectService.deleteProject(project.id)
             || of(false)
           )
         ),
@@ -101,10 +99,9 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
           this.projects = [...this.projects];
           this.cdRef.markForCheck();
         },
-        error: () => {
-          this.notificationService.showErrorNotification('Error: delete project is failed!');
-        },
-        complete: () => this.spinnerService.hideSpinner()
+      })
+      .add(() => {
+        this.spinnerService.hideSpinner();
       });
   }
 

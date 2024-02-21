@@ -14,5 +14,5 @@ export interface EmployeeServiceModel {
   postEmployee(body: EmployeeModel): Observable<void | EmployeeModel>;
   putEmployee(body: EmployeeModel): Observable<void>;
 
-  deleteEmployee(id: number): Observable<void>;
+  deleteEmployee(id: string): Observable<void>;
 }

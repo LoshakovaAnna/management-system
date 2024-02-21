@@ -17,7 +17,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ConfirmWindowComponent, EntriesTableComponent} from '@shared/modules';
 import {ConfirmWindowDataModel, ProjectModel, TaskModel} from '@core/models';
-import {EMPLOYEE_SERVICE, NotificationService, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
+import {EMPLOYEE_SERVICE, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
 import {UrlPageEnum} from '@core/enums';
 
 @Component({
@@ -59,7 +59,6 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
 
   constructor(private router: Router,
               public dialog: MatDialog,
-              private notificationService: NotificationService,
               private cdRef: ChangeDetectorRef) {
   }
 
@@ -110,12 +109,11 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
           next: (data) => {
             this.tasks = data;
             this.cdRef.markForCheck();
-          },
-          error: () => {
-            this.notificationService.showErrorNotification('Error: load tasks list is failed!');
-          },
-          complete: () => this.spinnerService.hideSpinner()
-        });
+          }
+        })
+      .add(() => {
+        this.spinnerService.hideSpinner();
+      });
   }
 
   onEditTask(task: TaskModel) {
@@ -148,7 +146,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
       .pipe(
         switchMap(result => {
           this.spinnerService.showSpinner();
-          return !!result && !!task.id && this.taskService.deleteTask(+task.id)
+          return !!result && !!task.id && this.taskService.deleteTask(task.id)
           || of(false);
         }),
         first(),
@@ -163,11 +161,10 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
           this.tasks.splice(index, 1);
           this.tasks = [...this.tasks];
           this.cdRef.markForCheck();
-        },
-        error: () => {
-          this.notificationService.showErrorNotification('Error: delete task is failed!');
-        },
-        complete: () => this.spinnerService.hideSpinner()
+        }
+      })
+      .add(() => {
+        this.spinnerService.hideSpinner();
       });
   }
 }
