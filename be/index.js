@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors')
 
 const employeeRouter = require('./src/routes/employee-router');
+const projectRouter = require('./src/routes/project-router');
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use((req, res) => {
     req.next();
 });
 app.use('/api/v1', employeeRouter);
+app.use('/api/v1', projectRouter);
 const PORT = process.env.PORT || 5000;
 
 const start = async () => {

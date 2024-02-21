@@ -1,15 +1,12 @@
 const EmployeeModel = require('../models/employee-model');
+const {transformToSendFormat} = require('../utils');
 
-const transformEmployeeFromBDToSendFormat = (employeeDB) => {
-    const {name, lastName, patronymic, title, _id: id} = employeeDB;
-    return {id, name, lastName, patronymic, title};
-};
 const getEmployees = async (req, res) => {
     let employees = req.params.id
         ? EmployeeModel.findById(req.params.id)
-            .then(employees => (transformEmployeeFromBDToSendFormat(employees)))
+            .then(employee => (transformToSendFormat(employee)))
         : EmployeeModel.find()
-            .then(employees => (employees.map(empl => (transformEmployeeFromBDToSendFormat(empl)))));
+            .then(employees => (employees.map(empl => (transformToSendFormat(empl)))));
     employees
         .then(
             data => {
@@ -35,7 +32,7 @@ const createEmployee = async (req, res) => {
     EmployeeModel.create({name, lastName, patronymic, title})
         .then(
             employee => {
-                res.send(transformEmployeeFromBDToSendFormat(employee));
+                res.send(transformToSendFormat(employee));
             }
         )
         .catch(error => {
