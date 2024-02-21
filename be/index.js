@@ -1,3 +1,4 @@
+const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors')
@@ -5,7 +6,6 @@ const cors = require('cors')
 const employeeRouter = require('./src/routes/employee-router');
 const projectRouter = require('./src/routes/project-router');
 const taskRouter = require('./src/routes/task-router');
-
 
 const app = express();
 app.use(express.json());
@@ -22,12 +22,18 @@ app.use((req, res) => {
 app.use('/api/v1', employeeRouter);
 app.use('/api/v1', projectRouter);
 app.use('/api/v1', taskRouter);
+
+dotenv.config();
 const PORT = process.env.PORT || 5000;
+const MONGO_USER = process.env.MONGO_USER;
+const MONGO_PASS = process.env.MONGO_PASS;
+const MONGO_DB = process.env.MONGO_DB;
+const MONGO_CLUSTER = process.env.MONGO_CLUSTER;
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb+srv://userAn:****@cluster0.i84rot5.mongodb.net/myDB?retryWrites=true&w=majority');
-        app.listen(5000, () => console.log(`Server started on PORT ${5000}`));
+        await mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASS}@${MONGO_CLUSTER}/${MONGO_DB}?retryWrites=true&w=majority`);
+        app.listen(PORT, () => console.log(`Server started on PORT ${PORT}`));
     } catch (e) {
         console.log(e);
         console.log('Connect to DB is failed.');
