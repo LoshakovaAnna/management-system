@@ -20,8 +20,8 @@ export class ProjectMockService implements ProjectServiceModel {
       );
   };
 
-  getProjectById(id: number): Observable<ProjectModel | undefined> {
-    return from(this.dbService.projectItems.get(id));
+  getProjectById(id: string): Observable<ProjectModel | undefined> {
+    return from(this.dbService.projectItems.get(+id));
   };
 
 
@@ -35,7 +35,7 @@ export class ProjectMockService implements ProjectServiceModel {
     return from(this.dbService.projectItems.put(body));
   };
 
-  deleteProject(id: number): Observable<void> {
-    return from(this.dbService.projectItems.delete(id));
+  deleteProject(id: string): Observable<void> {
+    return from(this.dbService.projectItems.delete(+id));
   };
 }

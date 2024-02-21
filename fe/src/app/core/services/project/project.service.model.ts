@@ -8,7 +8,7 @@ export const PROJECT_SERVICE = new InjectionToken<ProjectServiceModel>('project-
 export interface ProjectServiceModel {
 
   getProjects(): Observable<Array<ProjectModel>>;
-  getProjectById(id: number): Observable<ProjectModel | undefined>;
+  getProjectById(id: string): Observable<ProjectModel | undefined>;
 
   postProject(body: ProjectModel): Observable<void | ProjectModel>;
   putProject(body: ProjectModel): Observable<void>;

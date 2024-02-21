@@ -9,7 +9,7 @@ export const EMPLOYEE_SERVICE = new InjectionToken<EmployeeServiceModel>('employ
 export interface EmployeeServiceModel {
 
   getEmployees(): Observable<Array<EmployeeModel>>;
-  getEmployeeById(id: number): Observable<EmployeeModel | undefined>;
+  getEmployeeById(id: string): Observable<EmployeeModel | undefined>;
 
   postEmployee(body: EmployeeModel): Observable<void | EmployeeModel>;
   putEmployee(body: EmployeeModel): Observable<void>;

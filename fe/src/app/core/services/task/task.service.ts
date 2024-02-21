@@ -19,7 +19,7 @@ export class TaskService implements TaskServiceModel {
     return this.http.get<TaskModel[]>(`${this.url}/api/v1/tasks`);
   }
 
-  getTaskById(id: number): Observable<TaskModel | undefined> {
+  getTaskById(id: string): Observable<TaskModel | undefined> {
     return this.http.get<TaskModel>(`${this.url}/api/v1/tasks/${id}`);
   }
 

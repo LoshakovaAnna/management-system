@@ -18,9 +18,8 @@ export class TaskMockService implements TaskServiceModel {
     return from(this.dbService.taskItems.toArray());
   }
 
-  getTaskById(id: number): Observable<TaskModel | undefined> {
-
-    return from(this.dbService.taskItems.get(id));
+  getTaskById(id: string): Observable<TaskModel | undefined> {
+    return from(this.dbService.taskItems.get(+id));
   }
 
   postTask(body: TaskModel): Observable<void | TaskModel> {
@@ -33,7 +32,7 @@ export class TaskMockService implements TaskServiceModel {
     return from(this.dbService.taskItems.put(body));
   };
 
-  deleteTask(id: number): Observable<void> {
-    return from(this.dbService.taskItems.delete(id));
+  deleteTask(id: string): Observable<void> {
+    return from(this.dbService.taskItems.delete(+id));
   };
 }

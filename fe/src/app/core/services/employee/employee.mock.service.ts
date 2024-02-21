@@ -22,11 +22,11 @@ export class EmployeeMockService implements EmployeeServiceModel {
         ));
   };
 
-  getEmployeeById(id: number): Observable<EmployeeModel | undefined> {
+  getEmployeeById(id: string): Observable<EmployeeModel | undefined> {
     return interval(this.intervalMl)
       .pipe(
         take(1),
-        switchMap(() => from(this.dbService.employeeItems.get(id)))
+        switchMap(() => from(this.dbService.employeeItems.get(+id)))
       );
   };
 
@@ -48,11 +48,11 @@ export class EmployeeMockService implements EmployeeServiceModel {
       );
   };
 
-  deleteEmployee(id: number): Observable<void> {
+  deleteEmployee(id: string): Observable<void> {
     return interval(this.intervalMl)
       .pipe(
         take(1),
-        switchMap(() => from(this.dbService.employeeItems.delete(id)))
+        switchMap(() => from(this.dbService.employeeItems.delete(+id)))
       );
   };
 }

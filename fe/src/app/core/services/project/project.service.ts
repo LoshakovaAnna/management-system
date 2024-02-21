@@ -17,7 +17,7 @@ export class ProjectService implements ProjectServiceModel{
   getProjects(): Observable<Array<ProjectModel>>{
     return this.http.get<ProjectModel[]>(`${this.url}/api/v1/projects`);
   }
-  getProjectById(id: number): Observable<ProjectModel>{
+  getProjectById(id: string): Observable<ProjectModel>{
     return this.http.get<ProjectModel>(`${this.url}/api/v1/projects/${id}`);
   }
 

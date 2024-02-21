@@ -17,7 +17,7 @@ export class EmployeeService implements EmployeeServiceModel{
   getEmployees(): Observable<Array<EmployeeModel>>{
     return this.http.get<EmployeeModel[]>(`${this.url}/api/v1/employees`);
   }
-  getEmployeeById(id: number): Observable<EmployeeModel>{
+  getEmployeeById(id: string): Observable<EmployeeModel>{
     return this.http.get<EmployeeModel>(`${this.url}/api/v1/employees/${id}`);
   }
 
