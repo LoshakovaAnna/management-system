@@ -13,7 +13,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {first, of, switchMap, tap} from 'rxjs';
 
 import {EMPLOYEE_SERVICE, SpinnerService,} from '@core/services';
-import {ConfirmWindowDataModel, EmployeeModel} from '@core/models';
+import {ConfirmWindowDataModel, EmployeeModel, DEFAULT_TABLE_CONFIG, TableConfigModel} from '@core/models';
 import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
 import {UrlPageEnum} from '@core/enums';
 
@@ -30,7 +30,8 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
   spinnerService = inject(SpinnerService);
 
   employees!: EmployeeModel[];
-  displayedColumns: string[] = ['id', 'lastName', 'name', 'patronymic', 'title'];
+  totalAmount: number = 0;
+  displayedColumns: string[] = ['lastName', 'name', 'patronymic', 'title'];
 
   constructor(private router: Router,
               public dialog: MatDialog,
@@ -41,22 +42,7 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.spinnerService.showSpinner();
-    this.employeeService.getEmployees()
-      .pipe(
-        first(),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-        next: (data) => {
-          this.employees = data;
-          this.cdRef.markForCheck();
-          this.spinnerService.hideSpinner();
-        },
-        error: () => {
-          this.spinnerService.hideSpinner();
-        }
-      });
+    this.onChangePageConfig(DEFAULT_TABLE_CONFIG);
   }
 
   onAddEmployee() {
@@ -83,7 +69,7 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed()
       .pipe(
-        tap(()=> this.spinnerService.showSpinner()),
+        tap(() => this.spinnerService.showSpinner()),
         switchMap(result => (!!result && !!employee.id
             && this.employeeService.deleteEmployee(employee.id)
             || of(false)
@@ -103,6 +89,26 @@ export class EmployeesPageComponent implements OnInit, AfterViewInit {
       })
       .add(() => {
         this.spinnerService.hideSpinner();
+      });
+  }
+
+  onChangePageConfig(config: TableConfigModel) {
+    this.spinnerService.showSpinner();
+    this.employeeService.getEmployeesPaginator(config)
+      .pipe(
+        first(),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (data) => {
+          this.totalAmount = data.total;
+          this.employees = data.employees;
+          this.cdRef.markForCheck();
+          this.spinnerService.hideSpinner();
+        },
+        error: () => {
+          this.spinnerService.hideSpinner();
+        }
       });
   }
 

@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 
 import {environment} from '@env/environment';
 import {EmployeeServiceModel} from './employee.service.model';
-import {EmployeeModel} from '@core/models';
+import {EmployeeModel, EmployeePageModel, TableConfigModel} from '@core/models';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,12 @@ export class EmployeeService implements EmployeeServiceModel{
   }
   getEmployeeById(id: string): Observable<EmployeeModel>{
     return this.http.get<EmployeeModel>(`${this.url}/api/v1/employees/${id}`);
+  }
+
+  getEmployeesPaginator(config: TableConfigModel): Observable<EmployeePageModel>{
+    let params = `page=${config.pageIndex}&limit=${config.pageSize}`;
+    params +=`&sort=${config.sortField}&sortDirection=${config.sortDirection}`;
+    return this.http.get<EmployeePageModel>(`${this.url}/api/v1/employees?${params}`);
   }
 
   postEmployee(body: EmployeeModel): Observable<void | EmployeeModel>{

@@ -5,3 +5,8 @@ export interface EmployeeModel {
   patronymic: string;
   title: string;
 }
+
+export interface EmployeePageModel {
+  employees: EmployeeModel[];
+  total: number;
+}

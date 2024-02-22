@@ -3,10 +3,12 @@
   <app-entries-table
     [displayedColumns]="displayedColumns"
     [entries]="employees"
+    [totalEntries]="totalAmount"
     entryName="Employee"
     (addEntry)="onAddEmployee()"
     (editEntry)="onEditEmployee($event)"
     (deleteEntry)="onDeleteEmployee($event)"
+    (changePageConfig)="onChangePageConfig($event)"
   ></app-entries-table>
 </main>
 

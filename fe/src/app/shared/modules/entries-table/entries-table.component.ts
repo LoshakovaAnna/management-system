@@ -12,10 +12,11 @@ import {
 import {CommonModule} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSort, MatSortModule} from '@angular/material/sort';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
 import {MatTable, MatTableDataSource, MatTableModule} from '@angular/material/table';
 
+import {DEFAULT_TABLE_CONFIG, SortDirectionEnum, TableConfigModel} from "@models/table-config.model";
 import {TaskModel} from '@core/models';
 
 @Component({
@@ -27,18 +28,21 @@ import {TaskModel} from '@core/models';
  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EntriesTableComponent implements OnChanges, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  // @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<TaskModel>;
 
   @Input() displayedColumns: string[] = [];
   @Input() columnLabels: { [key: string]: string } = {};
   @Input() entries: any[] = [];
   @Input() entryName: string = 'Entry';
+  @Input() totalEntries: number = 0;
 
   @Output() addEntry = new EventEmitter();
   @Output() deleteEntry = new EventEmitter();
   @Output() editEntry = new EventEmitter();
+  @Output() changePageConfig = new EventEmitter();
+
+  tableConfig: TableConfigModel = { ...DEFAULT_TABLE_CONFIG};
 
 
   extraDisplayedColumns: string[] = [];
@@ -47,8 +51,8 @@ export class EntriesTableComponent implements OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['entries'] && !!changes['entries'].currentValue) {
       this.dataSource = new MatTableDataSource(changes['entries'].currentValue);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      //   this.dataSource.paginator = this.paginator;
+    //  this.dataSource.sort = this.sort;
     }
     if (changes && changes['displayedColumns'] && !!changes['displayedColumns'].currentValue) {
       this.extraDisplayedColumns = [...changes['displayedColumns'].currentValue, 'action'];
@@ -76,5 +80,18 @@ export class EntriesTableComponent implements OnChanges, AfterViewInit {
 
   onEditEntry(row: any) {
     this.editEntry.emit(row);
+  }
+
+  onChangePage(event: PageEvent) {
+    this.tableConfig.pageIndex = event.pageIndex;
+    this.tableConfig.pageSize = event.pageSize;
+    this.changePageConfig.emit(this.tableConfig);
+  }
+
+  onChangeSort(event: Sort) {
+    // @ts-ignore
+    this.tableConfig.sortDirection = !!event.direction ? SortDirectionEnum[event.direction] :0;
+    this.tableConfig.sortField  = !!event.direction ? event.active: '';
+    this.changePageConfig.emit(this.tableConfig);
   }
 }

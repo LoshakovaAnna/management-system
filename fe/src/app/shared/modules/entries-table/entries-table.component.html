@@ -30,11 +30,13 @@
     <tr mat-row *matRowDef="let row; columns: extraDisplayedColumns;"></tr>
   </table>
 
-  <mat-paginator #paginator
-                 [length]="dataSource.data.length "
-                 [pageIndex]="0"
-                 [pageSize]="5"
-                 [pageSizeOptions]="[5, 10, 20]"
-                 aria-label="Select page">
-  </mat-paginator>
+    <mat-paginator #paginator
+                   [length]="totalEntries"
+                   [pageIndex]="tableConfig.pageIndex"
+                   [pageSize]="tableConfig.pageSize"
+                   [pageSizeOptions]="[5, 10, 20]"
+                   (page)="onChangePage($event)"
+                   aria-label="Select page">
+    </mat-paginator>
+  </div>
 </div>
