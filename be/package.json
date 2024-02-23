@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start-dev": "nodemon index.js",
+    "start-init-mock-db": "node src/mock/init-mock-db.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
