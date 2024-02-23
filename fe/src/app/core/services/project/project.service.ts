@@ -3,8 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 import {ProjectServiceModel} from '@core/services';
-import {ProjectModel} from '@models/project.model';
 import {environment} from '@env/environment';
+import {ProjectModel, ProjectPageModel, TableConfigModel} from "@core/models";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,12 @@ export class ProjectService implements ProjectServiceModel{
 
   getProjects(): Observable<Array<ProjectModel>>{
     return this.http.get<ProjectModel[]>(`${this.url}/api/v1/projects`);
+  }
+
+  getProjectsPaginator(config: TableConfigModel):Observable<ProjectPageModel>{
+    let params = `page=${config.pageIndex}&limit=${config.pageSize}`;
+    params +=`&sort=${config.sortField}&sortDirection=${config.sortDirection}`;
+    return this.http.get<ProjectPageModel>(`${this.url}/api/v1/projects?${params}`);
   }
   getProjectById(id: string): Observable<ProjectModel>{
     return this.http.get<ProjectModel>(`${this.url}/api/v1/projects/${id}`);

@@ -13,7 +13,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {MatDialog} from '@angular/material/dialog';
 
 import {PROJECT_SERVICE, SpinnerService} from '@core/services';
-import {ConfirmWindowDataModel, ProjectModel} from '@core/models';
+import {ConfirmWindowDataModel, DEFAULT_TABLE_CONFIG, ProjectModel, TableConfigModel} from '@core/models';
 import {ConfirmWindowComponent} from '@shared/modules/confirm-window/confirm-window.component';
 import {UrlPageEnum} from '@core/enums';
 
@@ -31,7 +31,8 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
   spinnerService = inject(SpinnerService);
 
   projects!: ProjectModel[];
-  displayedColumns: string[] = ['id', 'name', 'description'];
+  totalAmount: number = 0;
+  displayedColumns: string[] = ['name', 'description'];
 
   constructor(private router: Router,
               public dialog: MatDialog,
@@ -42,12 +43,17 @@ export class ProjectsPageComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.onChangePageConfig(DEFAULT_TABLE_CONFIG);
+  }
+
+  onChangePageConfig(config: TableConfigModel){
     this.spinnerService.showSpinner();
-    this.projectService.getProjects()
+    this.projectService.getProjectsPaginator(config)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          this.projects = data;
+          this.totalAmount = data.total;
+          this.projects = data.projects;
           this.cdRef.markForCheck();
         },
       })
