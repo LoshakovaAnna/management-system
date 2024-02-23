@@ -16,6 +16,37 @@ const getProjects = async (req, res) => {
         });
 }
 
+
+const getProjectsPagination = async (req, res) => {
+
+    let count = 0;
+
+    ProjectModel.estimatedDocumentCount()
+        .then(
+            data => {
+                count = data;
+                if (!count) {
+                    return res.status(200).send([])
+                }
+                let {sort, sortDirection, limit, page} = req.query ? req.query : {limit: 5, page: 0};
+                const skip = limit * page;
+                sortDirection = !sortDirection ? 1 : +sortDirection;
+                return ProjectModel.find().sort(sort ? {[sort]: sortDirection} : null).skip(skip).limit(limit);
+            }
+        )
+        .then(projects => (projects.map(el => (transformToSendFormat(el)))))
+        .then(projects => {
+            res.send({
+                projects,
+                total: count
+            });
+        })
+        .catch(() => {
+            console.log(`find project(s) is failed, q=${req.query}`);
+            res.status(500).send({message: 'Find project(s) is failed.'});
+        });
+};
+
 const createProject = async (req, res) => {
     if (!req.body) {
         return res.status(400).send({message: 'No body found.'});
@@ -78,6 +109,7 @@ const deleteProject = async (req, res) => {
 
 module.exports = {
     getProjects,
+    getProjectsPagination,
     createProject,
     deleteProject,
     updateProject
