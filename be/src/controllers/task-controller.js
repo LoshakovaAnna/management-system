@@ -11,56 +11,165 @@ const getDate = (d) => {
     return dayjs(d, 'DD.MM.YY').toDate();
 };
 
-const getTasks = async (req, res) => {
+/*
+* filterObject:{[key:string]: any}
+* =>[]{}
+* */
+const getFilterAggregateConditions = (filterObject) => {
+    if (!filterObject) {
+        return [];
+    }
+    const aggregateConditions = [];
+    for (const filterObjectKey in filterObject) {
+        if (filterObjectKey.toLowerCase().endsWith('id')) {
+            try {
+                const fieldName = filterObjectKey === 'id' ? '_id' : filterObjectKey;
+                const idObj = new mongoose.Types.ObjectId(filterObject[filterObjectKey]);
+                aggregateConditions.push({$match: {[fieldName]: idObj}});
+            } catch (e) {
+                console.log('can\'t convert id');
+                return new Error('getTotalByFilter: can\'t convert id');
+            }
+        } else {
+            aggregateConditions.push({$match: {[filterObjectKey]: filterObject[filterObjectKey]}}); // value = null?
+        }
+    }
+    return aggregateConditions;
+}
+
+/*
+* Function return Promise<array of objects> - conditions for aggregate function of mogoose.Model
+* @param filter: {id?: number,
+* projectId?:number}
+* @param params: {sort?: string
+* sortDirection?: 1 -1 0
+* limit? number
+* page?: number}
+*
+* @return  Promise<array of objects>
+* */
+const getAggregateConditions = async (filter, params) => {
+    return new Promise((resolve, reject) => {
+        const {sort, sortDirection, limit, page} = params;
+        const aggregateConditions = [];
+        try {
+            aggregateConditions.push(...getFilterAggregateConditions(filter));
+        } catch (e) {
+            return reject('error of id')
+        }
+        aggregateConditions.push(
+            {
+                $lookup:
+                    {from: 'projects', localField: 'projectId', foreignField: '_id', as: 'proj'}
+            },
+            {$unwind: '$proj'},
+            {
+                $lookup:
+                    {from: 'employees', localField: 'employeeId', foreignField: '_id', as: 'empl'}
+            },
+            {$unwind: '$empl'},
+            {
+                $project: {
+                    '_id': 1,
+                    'title': 1,
+                    'description': 1,
+                    'status': 1,
+                    'startDate': 1,
+                    'endDate': 1,
+                    'employeeId': 1,
+                    'projectId': 1,
+                    'projectName': '$proj.name',
+                    // 'employee': '$empl',
+                    'employeeFullName': {
+                        $concat: [
+                            '$empl.lastName',
+                            ' ',
+                            '$empl.name',
+                            ' ',
+                            '$empl.patronymic',
+                        ]
+                    }
+                }
+
+            },
+        );
+        if (sort && sortDirection) {
+            aggregateConditions.push({$sort: {[sort]: +sortDirection}})
+        }
+        if (limit) {
+            aggregateConditions.push({$skip: (limit * page) || 0});
+            aggregateConditions.push({$limit: +limit});
+        }
+        resolve(aggregateConditions);
+
+    });
+
+}
+
+/*
+* function calculate number of records in db
+* @return [{total: number}]
+* */
+const getTotalByFilter = async (filterObject) => {
+    if (!filterObject) {
+        return TaskModel.estimatedDocumentCount();
+    }
     const aggregateConditions = [];
     try {
-        if (req.params.id) {
-            const id1 = new mongoose.Types.ObjectId(req.params.id);
-            aggregateConditions.push({'$match': {'_id': {'$in': [id1]}}});
-        }
+        aggregateConditions.push(...getFilterAggregateConditions(filterObject));
     } catch (e) {
-        return res.status(400).send({message: 'invalid id'})
+        return Promise.reject('getTotalByFilter: can\'t convert id')
     }
+    aggregateConditions.push({$count: 'total'});
+    return TaskModel.aggregate(aggregateConditions);
+}
 
-    aggregateConditions.push(
-        {
-            $lookup:
-                {from: 'projects', localField: 'projectId', foreignField: '_id', as: 'proj'}
-        },
-        {$unwind: '$proj'},
-        {
-            $lookup:
-                {from: 'employees', localField: 'employeeId', foreignField: '_id', as: 'empl'}
-        },
-        {$unwind: '$empl'},
-        {
-            $project: {
-                '_id': 1,
-                'title': 1,
-                'description': 1,
-                'status': 1,
-                'startDate': 1,
-                'endDate': 1,
-                'employeeId': 1,
-                'projectId': 1,
-                'projectName': '$proj.name',
-                'employee': '$empl'
-            }
+const getTasks = async (req, res) => {
+    let total = 0;
+    const pr = req?.params?.id
+        ? Promise.resolve([{total: 1}])
+        : getTotalByFilter({...req.params});//'status': 'some'
+
+    pr.then(v => {
+        total = v;
+        if (!total) {
+            return null;
         }
-    );
-    TaskModel.aggregate(aggregateConditions)
-        .then(tasks => {
-            const data = tasks.map(proj => (transformToSendFormat(proj)));
-            return res.send(req.params.id ? data[0] : data)
-        })
+        if (!!total && !total.length) {
+            res.status(200).send({tasks: [], total: 0})
+            return null;
+        }
+        return getAggregateConditions({...req.params}, {...req.query});
+
+    })
+
         .catch((e) => {
             console.log(e);
-            console.log(`find task(s) is failed`);
-            res.status(500).send({message: 'Find task(s) is failed.'});
+            return res.status(400).send({message: 'invalid id'});
+        })
+        .then(
+            (aggregateConditions) => {
+                if (!aggregateConditions) {
+                    throw new Error('wrong condition');
+                }
+                return TaskModel.aggregate(aggregateConditions);
+
+            }
+        )
+        .then((tasks) => {
+            const data = tasks.map(proj => (transformToSendFormat(proj)));
+            return res.send(req.params.id ? data[0] : {tasks: data, total: total?.[0]?.total || 0})
+        })
+        .catch((e) => {
+            console.log(`find task(s) is failed`, e);
+            if (!res.finished) {
+                res.status(500).send({message: 'Find task(s) is failed.'});
+            }
         });
 }
 
-const sendTask = async (req, res) => {
+
+const addTask = async (req, res) => {
     const id = req?.params?.id;
     if (!req.body) {
         return res.status(400).send({message: 'No body found.'});
@@ -111,6 +220,6 @@ const deleteTask = async (req, res) => {
 
 module.exports = {
     getTasks,
-    sendTask,
+    addTask,
     deleteTask,
 };
