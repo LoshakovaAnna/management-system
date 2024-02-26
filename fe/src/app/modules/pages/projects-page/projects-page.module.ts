@@ -13,6 +13,7 @@ import {MatListModule} from '@angular/material/list';
 import {ProjectsPageComponent} from './projects-page.component';
 import {ProjectManageComponent} from './project-manage/project-manage.component';
 import {EntriesTableComponent, TasksTableComponent, PageTitleComponent} from '@shared/modules';
+import {UrlPageEnum} from '@core/enums';
 
 
 const routes: Routes = [
@@ -21,7 +22,7 @@ const routes: Routes = [
     component: ProjectsPageComponent,
   },
   {
-    path: 'manage-project',
+    path:  UrlPageEnum.manageProject,
     component: ProjectManageComponent
   }
 ];

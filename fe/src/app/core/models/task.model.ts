@@ -7,10 +7,25 @@ export interface TaskModel {
   description: string;
   startDate: Moment | Date | string | null;
   endDate: Moment | Date | string | null;
-  projectId?: number;
+  projectId?: string;
   projectName?: string;
-  employeeId?: number;
+  employeeId?: string;
   employeeFullName?: string;
 }
 
-export type TaskStatus = 'Not Started' | 'In progress' | 'Finished' | 'Delay';
+export interface TaskPageModel {
+  tasks: TaskModel[];
+  total: number;
+}
+
+export type TaskStatus = TaskStatusEnum.NotStarted
+  | TaskStatusEnum.InProgress
+  | TaskStatusEnum.Finished
+  | TaskStatusEnum.Delay;
+
+export const enum TaskStatusEnum {
+  'NotStarted' = 'Not Started',
+  'InProgress' = 'In progress',
+  'Finished' = 'Finished',
+  'Delay' = 'Delay'
+}

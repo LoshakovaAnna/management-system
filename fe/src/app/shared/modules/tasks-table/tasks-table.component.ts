@@ -12,11 +12,11 @@ import {
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {first, map, of, switchMap} from 'rxjs';
+import {first, of, switchMap} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 import {ConfirmWindowComponent, EntriesTableComponent} from '@shared/modules';
-import {ConfirmWindowDataModel, ProjectModel, TaskModel} from '@core/models';
+import {ConfirmWindowDataModel, DEFAULT_TABLE_CONFIG, ProjectModel, TableConfigModel, TaskModel} from '@core/models';
 import {EMPLOYEE_SERVICE, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
 import {UrlPageEnum} from '@core/enums';
 
@@ -26,13 +26,18 @@ import {UrlPageEnum} from '@core/enums';
   imports: [CommonModule, EntriesTableComponent],
   templateUrl: './tasks-table.component.html',
   styleUrls: ['./tasks-table.component.scss'],
- // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksTableComponent implements OnChanges, AfterViewInit {
   @Input() project?: ProjectModel;
 
+  totalAmount: number = 0;
+
+  currentTablePageConfig: TableConfigModel = DEFAULT_TABLE_CONFIG;
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes['entries'] && !!changes['entries'].currentValue) {
+    if (changes && changes['project'] && !!changes['project'].currentValue) {
+      console.log(changes && changes['project'] && changes['project'].currentValue)
     }
   }
 
@@ -44,7 +49,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
 
   tasks!: TaskModel[];
 
-  displayedColumns: string[] = ['id', 'status', 'title', 'projectName',
+  displayedColumns: string[] = ['status', 'title', 'projectName',
     'description', 'startDate', 'endDate', 'employeeFullName'];
   labels = {
     id: 'Id',
@@ -63,51 +68,31 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    let tasks: Array<TaskModel> = [];
-    let projects: Array<ProjectModel> = [];
+    this.onChangePageConfig(DEFAULT_TABLE_CONFIG);
+  }
 
-    this.spinnerService.showSpinner();
-    this.taskService.getTasks()
-      .pipe(
-        switchMap((data) => {
-          tasks = data;
-          return this.project
-            ? of([this.project])
-            : this.projectService.getProjects();
-        }),
-        switchMap((data) => {
-          projects = data;
-          return this.employeeService.getEmployees()
-        }),
-        map((employees) => {
-          const projectsIdName: { [key: string | number]: string } = {};
-          projects.forEach(pr => {
-            if (!!pr.id) {
-              projectsIdName[pr.id] = pr.name;
-            }
-          })
-          const employeesIdFullName: { [key: string | number]: string } = {};
-          employees.forEach(empl => {
-            if (!!empl.id) {
-              employeesIdFullName[empl.id] = `${empl.lastName} ${empl.name} ${empl.patronymic}`;
-            }
-          });
-          if (this.project) {
-            tasks = tasks.filter(task => task.projectId === this.project?.id);
-          }
+  onChangePageConfig(config: TableConfigModel) {
+    this.currentTablePageConfig = config;
+    this.refreshTablePage();
 
-          return tasks.map(task => {
-            const projectName = !!task['projectId'] && projectsIdName[task['projectId']] || '';
-            const employeeName = !!task['employeeId'] && employeesIdFullName[task['employeeId']] || '';
+  }
 
-            return {...task, projectName, employeeFullName: employeeName} as TaskModel;
-          })
-        }),
-        takeUntilDestroyed(this.destroyRef))
+  refreshTablePage() {
+
+    this.spinnerService.showSpinner();  //todo jump
+    const req = this.project && this.project.id
+      ? this.taskService.getTaskByProjectId(this.project.id, this.currentTablePageConfig)
+      : this.taskService.getTasksPaginator(this.currentTablePageConfig);
+
+    req.pipe(
+      first(),
+      takeUntilDestroyed(this.destroyRef)
+    )
       .subscribe(
         {
           next: (data) => {
-            this.tasks = data;
+            this.tasks = data.tasks;
+            this.totalAmount = data.total
             this.cdRef.markForCheck();
           }
         })
@@ -147,7 +132,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
         switchMap(result => {
           this.spinnerService.showSpinner();
           return !!result && !!task.id && this.taskService.deleteTask(task.id)
-          || of(false);
+            || of(false);
         }),
         first(),
         takeUntilDestroyed(this.destroyRef)
@@ -157,10 +142,7 @@ export class TasksTableComponent implements OnChanges, AfterViewInit {
           if (res === false) {
             return;
           }
-          const index = this.tasks.indexOf(task);
-          this.tasks.splice(index, 1);
-          this.tasks = [...this.tasks];
-          this.cdRef.markForCheck();
+          this.refreshTablePage();
         }
       })
       .add(() => {

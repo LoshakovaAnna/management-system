@@ -17,6 +17,7 @@ import {TaskManageComponent} from './task-manage/task-manage.component';
 import {FULL_DATE_WITH_DOTES} from '@consts/date.const';
 import {EmployeeFullNamePipe} from '@pipes/employee-full-name.pipe';
 import {TasksTableComponent, PageTitleComponent} from '@shared/modules';
+import {UrlPageEnum} from '@core/enums';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
     component: TasksPageComponent,
   },
   {
-    path: 'manage-task',
+    path: UrlPageEnum.manageTask,
     component: TaskManageComponent
   }
 ];

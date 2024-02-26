@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 
-import {TaskModel} from '@core/models';
+import {TableConfigModel, TaskModel, TaskPageModel} from '@core/models';
 import {environment} from '@env/environment';
 import {TaskServiceModel} from './task.service.model';
 
@@ -18,12 +18,21 @@ export class TaskService implements TaskServiceModel {
   getTasks(): Observable<Array<TaskModel>> {
     return this.http.get<TaskModel[]>(`${this.url}/api/v1/tasks`);
   }
+  getTasksPaginator(config: TableConfigModel): Observable<TaskPageModel> {
+    let params = `page=${config.pageIndex}&limit=${config.pageSize}`;
+    params +=`&sort=${config.sortField}&sortDirection=${config.sortDirection}`;
+    return this.http.get<TaskPageModel>(`${this.url}/api/v1/tasks?${params}`);}
 
   getTaskById(id: string): Observable<TaskModel | undefined> {
     return this.http.get<TaskModel>(`${this.url}/api/v1/tasks/${id}`);
   }
+  getTaskByProjectId(projectId: string, config: TableConfigModel): Observable<TaskPageModel> {
+    let params = `page=${config.pageIndex}&limit=${config.pageSize}`;
+    params +=`&sort=${config.sortField}&sortDirection=${config.sortDirection}`;
+    return this.http.get<TaskPageModel>(`${this.url}/api/v1/tasks/project/${projectId}?${params}`);
+  }
 
-  postTask(body: TaskModel): Observable<void | TaskModel>{
+  postTask(body: any): Observable<void | TaskModel>{
     return this.http.post<TaskModel>(`${this.url}/api/v1/tasks`, body);
   }
 

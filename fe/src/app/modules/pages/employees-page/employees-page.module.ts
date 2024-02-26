@@ -13,6 +13,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {EmployeesPageComponent} from './employees-page.component';
 import {EmployeeManageComponent} from './employee-manage/employee-manage.component';
 import {EntriesTableComponent, PageTitleComponent} from '@shared/modules';
+import {UrlPageEnum} from '@core/enums';
 
 
 const routes: Routes = [
@@ -21,7 +22,7 @@ const routes: Routes = [
     component: EmployeesPageComponent,
   },
   {
-    path: 'manage-employee',
+    path: UrlPageEnum.manageEmployee,
     component: EmployeeManageComponent
   }
 ];

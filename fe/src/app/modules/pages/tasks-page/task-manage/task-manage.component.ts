@@ -68,8 +68,7 @@ export class TaskManageComponent implements OnInit {
       this.taskForm.patchValue(this.task);
     }
     if (this.project) {
-      // @ts-ignore
-      this.taskForm.patchValue({projectId: this.project.id});
+      this.taskForm.patchValue({projectId: this.task?.projectId || this.project?.id});
       this.taskForm.get('projectId')?.disable();
     }
     this.taskForm.get('id')?.disable();
