@@ -9,7 +9,7 @@ const transformToSendFormat = (dbResp) => {
     } catch (e) {
         //console.log(e)
     }
-    const newObj = {...v, id: dbResp._id};
+    const newObj = {id: dbResp._id, ...v};
     delete newObj._id;
     delete newObj.__v;
     return newObj;

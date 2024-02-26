@@ -128,7 +128,7 @@ const getTasks = async (req, res) => {
     let total = 0;
     const pr = req?.params?.id
         ? Promise.resolve([{total: 1}])
-        : getTotalByFilter({...req.params});//'status': 'some'
+        : getTotalByFilter({...req.params});
 
     pr.then(v => {
         total = v;
@@ -158,7 +158,12 @@ const getTasks = async (req, res) => {
         )
         .then((tasks) => {
             const data = tasks.map(proj => (transformToSendFormat(proj)));
-            return res.send(req.params.id ? data[0] : {tasks: data, total: total?.[0]?.total || 0})
+            const result = req.params.id
+                ? data[0]
+                : req.query && !!Object.keys(req.query).length
+                    ? {tasks: data, total: total?.[0]?.total || 0}
+                    : data;
+            return res.send(result)
         })
         .catch((e) => {
             console.log(`find task(s) is failed`, e);

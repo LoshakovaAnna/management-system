@@ -2,50 +2,52 @@ const EmployeeModel = require('../models/employee-model');
 const {transformToSendFormat} = require('../utils');
 
 const getEmployees = async (req, res) => {
-    let employees = req.params.id
+    let count = 0;
+
+    let employees = req?.params?.id
         ? EmployeeModel.findById(req.params.id)
-            .then(employee => (transformToSendFormat(employee)))
-        : EmployeeModel.find()
-            .then(employees => (employees.map(empl => (transformToSendFormat(empl)))));
+        : req.query && !!Object.keys(req.query).length
+            ? EmployeeModel.estimatedDocumentCount()
+                .then(
+                    data => {
+                        count = data;
+                        if (!count) {
+                            return [];
+                        }
+                        let {sort, sortDirection, limit, page} = req.query;
+                        const skip = limit * page;
+                        sortDirection = !sortDirection ? 1 : +sortDirection;
+                        return EmployeeModel.find().sort(sort ? {[sort]: sortDirection} : null).skip(skip).limit(limit);
+                    }
+                )
+            : EmployeeModel.find();
+
+
     employees
-        .then(
+        .then(data => {
+            if (Array.isArray(data)) {
+                return data.map(el => (transformToSendFormat(el)))
+            } else {
+                return  transformToSendFormat(data)
+            }
+        }).then(
             data => {
-                res.send(data);
+                const result = req.query && !!Object.keys(req.query).length
+                    ? {
+                        employees: data,
+                        total: count
+                    }
+                    : data;
+                res.send(result);
             }
         )
         .catch(error => {
+            console.log(error);
             console.log(`find employee(s) is failed, obj=${req.params.id}`);
             res.status(500).send({message: 'Find employee(s) is failed.'});
         });
 }
 
-const getEmployeesPagination = async (req, res) => {
-    let count = 0;
-    EmployeeModel.estimatedDocumentCount()
-        .then(
-            data => {
-                count = data;
-                if (!count) {
-                    return res.status(200).send([])
-                }
-                let {sort, sortDirection, limit, page} = req.query ? req.query : {limit: 5, page: 0};
-                const skip = limit * page;
-                sortDirection = !sortDirection ? 1 : +sortDirection;
-                return EmployeeModel.find().sort(sort ? {[sort]: sortDirection} : null).skip(skip).limit(limit);
-            }
-        )
-        .then(employees => (employees.map(empl => (transformToSendFormat(empl)))))
-        .then(employees => {
-            res.send({
-                employees,
-                total: count
-            });
-        })
-        .catch(() => {
-            console.log(`find employee(s) is failed, q=${req.query}`);
-            res.status(500).send({message: 'Find employee(s) is failed.'});
-        });
-}
 
 const createEmployee = async (req, res) => {
     if (!req.body) {
@@ -117,7 +119,6 @@ const deleteEmployee = async (req, res) => {
 
 module.exports = {
     getEmployees,
-    getEmployeesPagination,
     createEmployee,
     deleteEmployee,
     updateEmployee
