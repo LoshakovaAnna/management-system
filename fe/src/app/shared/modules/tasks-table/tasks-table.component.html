@@ -1,0 +1,11 @@
+<app-entries-table
+  [displayedColumns]="displayedColumns"
+  [columnLabels]="labels"
+  [entries]="tasks"
+  [totalEntries]="totalAmount"
+  entryName="Task"
+  (addEntry)="onAddTasks()"
+  (editEntry)="onEditTask($event)"
+  (deleteEntry)="onDeleteTask($event)"
+  (changePageConfig)="onChangePageConfig($event)"
+></app-entries-table>

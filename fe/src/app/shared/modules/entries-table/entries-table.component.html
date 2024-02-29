@@ -1,0 +1,50 @@
+<div class="m-20">
+  <button mat-raised-button (click)="onAddTask()">Add new {{entryName}}</button>
+</div>
+<div class="content-container">
+  <div class="full-width auto-x-scroll">
+    <table mat-table
+           class="full-width-table mat-elevation-z8"
+           [dataSource]="dataSource"
+           matSort (matSortChange)="onChangeSort($event)">
+      <ng-container *ngFor="let column of displayedColumns">
+        <ng-container [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="capitalize"
+          >{{columnLabels[column] || column}}</th>
+          <td mat-cell *matCellDef="let row">
+            <ng-container [ngSwitch]="column">
+              <ng-container  *ngSwitchCase="['startDate' ,'endDate'].includes(column) ? column : ''"
+              >{{row[column] | date: 'dd.MM.YYYY'}} </ng-container >
+              <p *ngSwitchCase="'status'" [appStatusColor]="row[column]">{{row[column]}}</p>
+              <ng-container *ngSwitchDefault>{{row[column]}}</ng-container>
+            </ng-container>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button (click)="onEditEntry(row)" title="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="onDeleteEntry(row)" title="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="extraDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: extraDisplayedColumns;"></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="totalEntries"
+                   [pageIndex]="tableConfig.pageIndex"
+                   [pageSize]="tableConfig.pageSize"
+                   [pageSizeOptions]="[5, 10, 20, 50, 100]"
+                   (page)="onChangePage($event)"
+                   aria-label="Select page">
+    </mat-paginator>
+  </div>
+</div>

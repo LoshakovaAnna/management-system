@@ -1,0 +1,71 @@
+@import "variables";
+@import "library";
+
+body {
+  background: $dark-gray;
+}
+
+
+table.mat-mdc-table thead {
+  background: $primary-color;
+}
+
+.content-container {
+  border: 1px solid $light-gray;
+  border-radius: 4px;
+  background: $gray-color;
+  margin: 20px;
+  position: static;
+  display: block;
+}
+
+th {
+  vertical-align: middle;
+}
+
+.notify-msg.mat-mdc-snack-bar-container {
+  .mdc-snackbar__surface {
+    background-color: $gray-color;
+    border: 3px solid $light-gray;
+    border-radius: 4px;
+  }
+
+  .mdc-snackbar__label {
+
+    color: white;
+  }
+
+  &.error-msg .mdc-snackbar__label {
+    color: $light-red;
+  }
+}
+
+.status-not-started {
+  color: pink
+}
+
+.status-in-progress {
+  color: yellow;
+
+}
+
+.status-finished {
+  color: green;
+}
+
+.status-delay {
+  color: red;
+}
+//.full-width-table {
+//  width: 100%;
+//}
+
+//table.mat-table {
+//  display: table;
+//  width: 50%;
+//}
+.mat-mdc-cell,
+.mat-mdc-table .mat-mdc-header-cell {
+  //word-break: break-word;
+  word-wrap: break-word;
+}

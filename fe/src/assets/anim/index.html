@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link href="./st.css" rel="stylesheet">
+</head>
+<body>
+
+<!--<div class="anim-move"></div>-->
+<!--<span class="icon">icon</span>-->
+<!--<span id="output"></span>-->
+<!--<div class="element">-->
+<!--  <p id="watchme">olololol</p>-->
+<!--  <script>-->
+<!--    function listener(e) {-->
+
+<!--      var l = document.createElement("li");-->
+<!--      console.log(e);-->
+<!--      switch (e.type) {-->
+
+<!--        case "animationstart":-->
+<!--          l.innerHTML = "Started: elapsed time is " + e.elapsedTime;-->
+<!--          break;-->
+<!--        case "animationend":-->
+<!--          l.innerHTML = "Ended: elapsed time is " + e.elapsedTime;-->
+<!--          break;-->
+<!--        case "animationiteration":-->
+<!--          l.innerHTML = "New loop started at time " + e.elapsedTime;-->
+<!--          break;-->
+<!--      }-->
+<!--      document.getElementById("output").appendChild(l);-->
+<!--    }-->
+
+<!--    var e = document.getElementById("watchme");-->
+<!--    if (!e) {console.log('no element')}-->
+<!--    else {-->
+<!--      console.log(e)-->
+<!--      e.addEventListener("animationstart", listener, false);-->
+<!--      e.addEventListener("animationend", listener, false);-->
+<!--      e.addEventListener("animationiteration", listener, false);-->
+<!--    }-->
+<!--    // e.className = "slidein";-->
+<!--  </script>-->
+<!--</div>-->
+
+<!--<p class="content-box">-->
+<!--  This is a bunch of text split into three columns using the CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.This is a bunch of text split into three columns using the-->
+<!--  CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.This is a bunch of text split into three columns using the-->
+<!--  CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.This is a bunch of text split into three columns using the-->
+<!--  CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.This is a bunch of text split into three columns using the-->
+<!--  CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.This is a bunch of text split into three columns using the-->
+<!--  CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.This is a bunch of text split into three columns using the-->
+<!--  CSS `column-count`-->
+<!--  property. The text is equally distributed over the columns.-->
+<!--</p>-->
+
+<embed src="./gradient.svg"/>
+<svg>
+  <!-- Градиент -->
+  <linearGradient id="linear-gradient">
+    <stop offset="0%" stop-color="gold"/>
+    <stop offset="050%" stop-color="pink"/>
+    <stop offset="100%" stop-color="teal"/>
+  </linearGradient>
+
+  <!-- Фигура с градиентной заливкой -->
+  <rect fill="url(#linear-gradient)"
+        width="100%" height="100%"/>
+</svg>
+
+
+<div class="mlkml"></div>
+<svg width="365" height="185">
+  <rect x="70" y="10" width="220" height="130"
+        fill="transparent" rx="150" stroke="crimson" stroke-width="10" />
+  <rect x="10" y="70" width="340" height="80" fill="crimson" rx="30" />
+  <g>
+    <!-- Left line -->
+    <line x1="145" y1="10" x2="145" y2="80" stroke="crimson" stroke-width="10"/>
+
+    <!-- Right line -->
+    <line x1="215" y1="10" x2="215" y2="80" stroke="crimson" stroke-width="10"/>
+  </g>
+  <g>
+    <circle r="40px" fill="#222" stroke="white" stroke-width="7" cx="270" cy="140"/>
+    <circle r="15px" fill="#555" cx="270" cy="140"/>
+  </g>
+</svg>
+
+<!--<div>-->
+<!--  <svg viewBox="0 0 100 100 ">-->
+<!--    <rect x="10" y="10" width="20" height="20"/>-->
+<!--    <circle r=""/>-->
+<!--    <polygon points=""/>-->
+<!--    <line/>-->
+<!--  </svg>-->
+<!--</div>-->
+<svg
+  class="heart"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+
+  <path
+    class="heart-item"
+    id="heart-path"
+    d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+
+  <text class="text" font-size="45px">
+    <textPath href="#heart-path" font-size="45px">
+      ЛЕША + АНЯ = ЛЮБОВЬ :* Лешка-картошка :* Аня-картофаня :* XO-XO-XO
+    </textPath>
+  </text>
+</svg>
+
+<div class="box">
+
+  <svg class="svg">
+    <rect
+      class="rect1"
+      x="10" y="50"
+      width="200" height="150"
+      fill="#123456"
+      rx="10"
+      ry="7"
+    >
+    </rect>
+    <rect
+      class="rect1 rect2"
+      x="10" y="50"
+      width="200" height="150"
+      fill="#123456"
+      rx="10"
+      ry="7"
+    >
+    </rect>
+  </svg>
+  <svg class="svg">
+    <circle r="100" fill="#cf1221"
+            cx="50%" cy="50%"
+            class="circle-anim2"/>
+    <circle r="50" fill="none"
+            cx="50%" cy="50%"
+
+            stroke="green"
+            stroke-width="100"
+            stroke-dasharray="20"
+            class="circle-anim"
+    ></circle>
+  </svg>
+  <svg class="svg">
+    <circle r="100" fill="#cff800"
+            cx="50%" cy="50%"
+
+            stroke="green"
+            stroke-width="30"
+            stroke-dasharray="5 10 15 20 30"
+    ></circle>
+  </svg>
+  <svg class="svg">
+    <ellipse rx="50" ry="75" fill="pink"
+             cx="50%" cy="50%"
+
+             stroke="red"
+             stroke-width="7"></ellipse>
+  </svg>
+  <svg class="svg">
+    <polygon
+      points="100,100 300,100 200,200 200,250"
+      fill="blue"
+      stroke="red"
+      stroke-width="5"
+      stroke-dasharray="30"
+      stroke-dashoffset="10"
+    />
+
+  </svg>
+  <svg class="svg">
+    <line id="line" x1="10" y1="50" x2="100" y2="200" stroke="red"/>
+
+    <text class="text">
+      <textPath href="#line">
+        Lor emLore mLorem LoremLoremLoremLorem
+      </textPath>
+    </text>
+  </svg>
+  <svg class="svg">
+    <polyline
+      id="polyline"
+      points="50,50 50,150 150,150 200,200 350,250"
+      fill="none"
+      stroke-linecap="butt"
+      stroke="green"
+      stroke-width="7"
+      stroke-linejoin="round"
+    />
+    <text class="text">
+      <textPath>
+        Lor emLore mLorem LoremLoremLoremLorem
+      </textPath>
+    </text>
+  </svg>
+
+
+  <svg class="svg">
+    <path id="tt" d="M1 9C13 61 54.6667 68.6667 74 66C90 63 122.8 56.2 126 53C129.2 49.8 141.333 17 147 1"
+          fill="none" stroke-width="4" stroke="blue"/>
+
+    <text class="text">
+      <textPath href="#tt">
+        Lor emLore mLorem LoremLoremLoremLorem
+      </textPath>
+    </text>
+
+  </svg>
+
+  <svg viewBox="0 0 92 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="SVGRepo_iconCarrier">
+      <path
+        d="M3 13.6493C3 16.6044 5.41766 19 8.4 19L16.5 19C18.9853 19 21 16.9839 21 14.4969C21 12.6503 19.8893 10.9449 18.3 10.25C18.1317 7.32251 15.684 5 12.6893 5C10.3514 5 8.34694 6.48637 7.5 8.5C4.8 8.9375 3 11.2001 3 13.6493Z"
+        stroke="none" stroke-width="2"
+
+        id="cloud"
+      ></path>
+      <text class="text">
+        <textPath href="#cloud" font-size="3">
+          Lor emLore mLorem LoremLoremLoremLorem
+          Lor emLore mLorem LoremLoremLoremLorem
+          Lor emLore mLorem LoremLoremLoremLorem
+          Lor emLore mLorem LoremLoremLoremLorem
+          Lor emLore mLorem LoremLoremLoremLorem
+        </textPath>
+      </text>
+    </g>
+  </svg>
+</div>
+
+<img class="forms" src="disney-princesses-2.png">
+
+
+<img class="img-fruit"
+     src="fr.jpg"
+     alt="fr.jpg">
+
+<svg class="cloud-svg" width="1" height="1" viewBox="0 0 1 1" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <clipPath id="cloud-clip-path"
+            clipPathUnits="objectBoundingBox">
+    <path
+      d="M0.125 0.56872C0.125 0.69185 0.225736 0.791666 0.35 0.791666H0.6875C0.791054 0.791666 0.875 0.707662 0.875 0.604037C0.875 0.527095 0.828721 0.456037 0.7625 0.427083C0.755487 0.305104 0.6535 0.208333 0.528721 0.208333C0.431308 0.208333 0.347789 0.270265 0.3125 0.354166C0.2 0.372396 0.125 0.46667 0.125 0.56872Z"
+      stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  </clipPath>
+
+</svg>
+<svg
+  class="heart"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <clipPath id="heart-clip-path" clipPathUnits="objectBoundingBox">
+    <path
+      class="heart-item"
+      d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+
+  </clipPath>
+</svg>
+<div class="icon-cont">
+  <svg id="eFdA6pNjTIl1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink"
+       viewBox="17 67 265 113"
+       shape-rendering="geometricPrecision"
+       text-rendering="geometricPrecision">
+    <path
+      d="M20.554278,100.132276L149.999999,78.990368l127.882938,21.141908v49.867722L149.999999,171.080192L20.554278,150.999998v-49.867722Z"
+      fill="none" stroke="#000" stroke-width="6"/>
+
+
+    <path d="M151,69.822103L90.323575,78.99037l.000001,11.459576"
+          fill="none" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M150,69.822104l60.222915,10.313921v10.313921"
+          fill="none" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+    <path
+      d="M210.222917,160.928412v10.151782l-61.004308,7.897582-58.895033-7.897582-.000001-10.151782"
+      transform="translate(.000001 0)" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="round"/>
+
+
+    <text dx="0" dy="0" font-family="&quot;eFdA6pNjTIl1:::Lora&quot;"
+          font-size="15" font-weight="700"
+          transform="translate(98 148)"
+          >
+      <tspan y="0" font-size="65" font-weight="700" >
+        <![CDATA[MS]]>
+      </tspan>
+    </text>
+    <style>
+      <![CDATA[
+    @font-face {
+      font-family: 'eFdA6pNjTIl1:::Lora';
+      font-style: normal;
+      font-weight: 700;
+      src: url(data:font/ttf;charset=utf-8;base64,AAEAAAAQAQAABAAAR0RFRgBmAAgAAAGgAAAALEdQT1OPH5c5AAAC7AAAAGpHU1VCDZsKowAAA1gAAAB0T1MvMohrXDcAAAKMAAAAYFNUQVTl6swNAAACBAAAAERjbWFwAGIA3AAAAkgAAABEZ2FzcAAAABAAAAEUAAAACGdseWZ+jhq6AAADzAAAAapoZWFkIUCYBAAAAcwAAAA2aGhlYQh/AP8AAAF8AAAAJGhtdHgLkgB4AAABKAAAABRsb2NhAVwBvQAAARwAAAAMbWF4cAAWAPUAAAE8AAAAIG5hbWUwx1ilAAAFeAAAAlBwb3N0/58AMgAAAVwAAAAgcHJlcGgGjIUAAAEMAAAAB7gB/4WwBI0AAAEAAf//AA8AAAATAIcA1QDVANUCEQAeA8wALwJWACsBBwAAAlgAAAABAAAABQBtAAcAhgAFAAEAAAAAAAAAAAAAAAAABAABAAMAAAAAAAD/nAAyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA+7+7gAABST/j/znBP8AAQAAAAAAAAAAAAAAAAAAAAUAAQACACIAAAAAAAAADgABAAMAAAAQAAAAEAAAABAAAQAAAAEAAQACAAEAAQABAAAAAwEG8VKxFV8PPPUAAwPoAAAAAN6ZYTcAAAAA3v7xZv+P/uQE/wSaAAEABgACAAAAAAAAAAEAAQAIAAIAAAAUAAIAAAAkAAJ3Z2h0AQAAAGl0YWwBCQABABQABAADAAEAAgEKAAAAAAABAAAAAQAAAAABBAK8AAAAAAACAAAAAwAAABQAAwABAAAAFAAEADAAAAAIAAgAAgAAACAATQBT//8AAAAgAE0AU////+P/tP+vAAEAAAAAAAAAAAAEAlYCvAAFAAACigJYAAAASwKKAlgAAAFeADIBLAAAAAAAAAAAAAAAAKAAAv9QACBLAAAAAAAAAABDWVJFAKAADfsCA+7+7gAABLYBJiAAAJcAAAAAAfQCvAAAACAAAwABAAAACgAqADgAA0RGTFQAFGN5cmwAFGxhdG4AFAAEAAAAAP//AAEAAAABa2VybgAIAAAAAQAAAAEABAACAAgAAQAIAAIAFAAEAAAAIgAaAAEAAgAAAAAAAQABAAIAAQACAAEAAQACAAAAAAABAAAACgAsAEYAA0RGTFQAFGN5cmwAFGxhdG4AFAAEAAAAAP//AAIAAAABAAJwbnVtABR0bnVtAA4AAAABAAEAAAABAAAAAgAaAAYAAQAAAAEACAABAAYAAQABAAEAAwABAAAAAQAIAAEABv//AAEAAQAEAAIAHgAAAeMB9AADAAcAADMRIRElMxEjHgHF/r++vgH0/gxIAWQAAQAv//YDogK8AE4AAAUmJicuAicWFgcUFAYUFRQGBzY2MxUjNT4CNRM2NjcGBgc1MxMeAhczNjY3NjY3MxUOAhcTFgYHNjYzFSE1PgInJzQmJicGBgcDAZgiQyIIGRsLAgIBAQMCETEK5BcfEQYBAgEQMAvdlwkWFAUBDRYMJ00n5xYiEQEPAgQCETEK/uoXIRECCAQDAQMGAsMKU6RSE0VaMDhjLRYuLS0XGzINAgFNQgEKJCgBfxsyDQEBAU3+fRc9OREjQh9ozmdCAQojKf6BGzINAgFNQgEKJCjUDDtHHwcNB/33AAEAK//wAjMCzAA2AAABLgIHIgYVFBYWFx4DFRQGBiMiJicXIzUzFhYzMjY2NTQmJicuAzU0PgIzMhYXJzMVAcYJLkcvK0EjSDcmUEQqQHNNKF0pA01CDmVGJDYeMUkmMFM+Ihg2WkIoXyIETgHcOEsmATAmHy4oFw8oN0kxO1wzGRgq6lRVGisZIy4gDxQtOksxH0M5JBgYKekAAAAAAAAMAJYAAwABBAkAAADsAM4AAwABBAkAAQAIAMYAAwABBAkAAgAIAL4AAwABBAkAAwAoAJYAAwABBAkABAASAIQAAwABBAkABQAaAGoAAwABBAkABgASAFgAAwABBAkADgA2ACIAAwABBAkBAAAMABYAAwABBAkBBAAIAL4AAwABBAkBCQAMAAoAAwABBAkBCgAKAAAAUgBvAG0AYQBuAEkAdABhAGwAaQBjAFcAZQBpAGcAaAB0AGgAdAB0AHAAcwA6AC8ALwBzAGMAcgBpAHAAdABzAC4AcwBpAGwALgBvAHIAZwAvAE8ARgBMAEwAbwByAGEALQBCAG8AbABkAFYAZQByAHMAaQBvAG4AIAAzAC4AMAAwADQATABvAHIAYQAgAEIAbwBsAGQAMwAuADAAMAA0ADsAQwBZAFIARQA7AEwAbwByAGEALQBCAG8AbABkAEIAbwBsAGQATABvAHIAYQBDAG8AcAB5AHIAaQBnAGgAdAAgADIAMAAxADEAIABUAGgAZQAgAEwAbwByAGEAIABQAHIAbwBqAGUAYwB0ACAAQQB1AHQAaABvAHIAcwAgACgAaAB0AHQAcABzADoALwAvAGcAaQB0AGgAdQBiAC4AYwBvAG0ALwBjAHkAcgBlAGEAbAB0AHkAcABlAC8ATABvAHIAYQAtAEMAeQByAGkAbABsAGkAYwApACwAIAB3AGkAdABoACAAUgBlAHMAZQByAHYAZQBkACAARgBvAG4AdAAgAE4AYQBtAGUAIAAiAEwAbwByAGEAIgAu) format('truetype');
+    }
+    ]    ]    ></style>
+  </svg>
+
+</div>
+</body>
+</html>

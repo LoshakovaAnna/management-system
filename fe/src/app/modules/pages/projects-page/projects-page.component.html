@@ -1,0 +1,14 @@
+<main>
+  <app-page-title title="Projects"/>
+  <app-entries-table
+    [displayedColumns]="displayedColumns"
+    [entries]="projects"
+    [totalEntries]="totalAmount"
+    entryName="Project"
+    (addEntry)="onAddProject()"
+    (editEntry)="onEditProject($event)"
+    (deleteEntry)="onDeleteProject($event)"
+    (changePageConfig)="onChangePageConfig($event)"
+  ></app-entries-table>
+</main>
+
