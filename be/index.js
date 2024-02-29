@@ -1,15 +1,26 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors')
+const cors = require('cors');
 
+const {checkAuth} = require('./src/controllers/auth-controller');
 const employeeRouter = require('./src/routes/employee-router');
 const projectRouter = require('./src/routes/project-router');
 const taskRouter = require('./src/routes/task-router');
+const authRouter = require('./src/routes/auth');
+
+
+dotenv.config();
+const PORT = process.env.PORT || 5000;
+const MONGO_USER = process.env.MONGO_USER;
+const MONGO_PASS = process.env.MONGO_PASS;
+const MONGO_DB = process.env.MONGO_DB;
+const MONGO_CLUSTER = process.env.MONGO_CLUSTER;
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
 app.use((req, res) => {
     res.setHeader(
         'Content-type', 'application/json'
@@ -19,16 +30,14 @@ app.use((req, res) => {
     };
     req.next();
 });
-app.use('/api/v1', employeeRouter);
-app.use('/api/v1', projectRouter);
-app.use('/api/v1', taskRouter);
 
-dotenv.config();
-const PORT = process.env.PORT || 5000;
-const MONGO_USER = process.env.MONGO_USER;
-const MONGO_PASS = process.env.MONGO_PASS;
-const MONGO_DB = process.env.MONGO_DB;
-const MONGO_CLUSTER = process.env.MONGO_CLUSTER;
+app.use('/api/v1/login', authRouter);
+app.use('/api/v1/projects', projectRouter);
+app.use('/api/v1/*', checkAuth);
+app.use('/api/v1/employees', employeeRouter);
+app.use('/api/v1/tasks', taskRouter);
+
+
 
 const start = async () => {
     try {
