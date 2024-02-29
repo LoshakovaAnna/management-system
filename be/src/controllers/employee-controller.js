@@ -8,39 +8,37 @@ const getEmployees = async (req, res) => {
         ? EmployeeModel.findById(req.params.id)
         : req.query && !!Object.keys(req.query).length
             ? EmployeeModel.estimatedDocumentCount()
-                .then(
-                    data => {
-                        count = data;
-                        if (!count) {
-                            return [];
-                        }
-                        let {sort, sortDirection, limit, page} = req.query;
-                        const skip = limit * page;
-                        sortDirection = !sortDirection ? 1 : +sortDirection;
-                        return EmployeeModel.find().sort(sort ? {[sort]: sortDirection} : null).skip(skip).limit(limit);
+                .then(data => {
+                    count = data;
+                    if (!count) {
+                        return [];
                     }
-                )
+                    let {sort, sortDirection, limit, page} = req.query;
+                    const skip = limit * page;
+                    sortDirection = !sortDirection ? 1 : +sortDirection;
+                    return EmployeeModel.find().sort(sort ? {[sort]: sortDirection} : null).skip(skip).limit(limit);
+                })
             : EmployeeModel.find();
 
 
     employees
         .then(data => {
             if (Array.isArray(data)) {
-                return data.map(el => (transformToSendFormat(el)))
+                return data.map(el => (transformToSendFormat(el)));
             } else {
-                return  transformToSendFormat(data)
+                return transformToSendFormat(data);
             }
         }).then(
-            data => {
-                const result = req.query && !!Object.keys(req.query).length
-                    ? {
-                        employees: data,
-                        total: count
-                    }
-                    : data;
-                res.send(result);
-            }
-        )
+        data => {
+            const result = req.query && !!Object.keys(req.query).length
+                ? {
+                    employees: data,
+                    total: count
+                }
+                : data;
+            res.send(result);
+        }
+    )
         .catch(error => {
             console.log(error);
             console.log(`find employee(s) is failed, obj=${req.params.id}`);
@@ -60,11 +58,7 @@ const createEmployee = async (req, res) => {
     }
 
     EmployeeModel.create({name, lastName, patronymic, title})
-        .then(
-            employee => {
-                res.send(transformToSendFormat(employee));
-            }
-        )
+        .then(employee => (res.send(transformToSendFormat(employee))))
         .catch(error => {
             console.log(`create employee is failed, obj=${req.body ? JSON.stringify(req.body) : req.body}`);
             res.status(500).send({message: 'create employee is failed'});
@@ -80,17 +74,13 @@ const updateEmployee = async (req, res) => {
     if (!name || !lastName || !patronymic || !title) {
         return res.status(404).send(
             {message: 'Failed validation: empty required field(s). Check name, lastName, patronymic, title '}
-        )
+        );
     }
 
     EmployeeModel.findByIdAndUpdate(id, {name, lastName, patronymic, title})
-        .then(
-            employee => {
-                res.send('ok');
-            }
-        )
+        .then(employee => (res.send('ok')))
         .catch(error => {
-            console.log(`update employee is failed, id=${id}, obj=${req.body ? JSON.stringify(req.body) : req.body}`);
+            console.log(`update employee is failed, id=${id}, obj=${req.body ? JSON.stringify(req.body) : req.body}`, error);
             res.status(500).send({message: 'update employee is failed'});
         });
 }

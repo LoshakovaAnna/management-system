@@ -13,7 +13,7 @@ const getProjects = async (req, res) => {
                     data => {
                         count = data;
                         if (!count) {
-                            return []
+                            return [];
                         }
                         let {sort, sortDirection, limit, page} = req.query ? req.query : {limit: 5, page: 0};
                         const skip = limit * page;
@@ -24,11 +24,9 @@ const getProjects = async (req, res) => {
             : ProjectModel.find();
     projects
         .then(data => {
-            if (Array.isArray(data)) {
-                return data.map(el => (transformToSendFormat(el)))
-            } else {
-                return transformToSendFormat(data)
-            }
+            return Array.isArray(data)
+                ? data.map(el => (transformToSendFormat(el)))
+                : transformToSendFormat(data);
         })
         .then(data => {
             const result = req.query && !!Object.keys(req.query).length
@@ -73,7 +71,7 @@ const updateProject = async (req, res) => {
     if (!name || !description) {
         return res.status(404).send(
             {message: 'Failed validation: empty required field(s). Check name, description'}
-        )
+        );
     }
 
     ProjectModel.findByIdAndUpdate(id, {name, description})
@@ -91,19 +89,13 @@ const deleteProject = async (req, res) => {
     }
 
     ProjectModel.findByIdAndDelete(id)
-        .then(
-            d => {
-                if (!d) {
-                    return res.status(404).send({message: 'no project found'});
-                }
-                res.status(200).send(d);
-            }
-        )
+        .then(d => {
+            return !!d ? res.status(200).send(d) : res.status(404).send({message: 'no project found'});
+        })
         .catch(() => {
             console.log(`findByIdAndDelete project is failed, id=${id}`);
             res.status(500).send({message: 'findByIdAndDelete project is failed!'});
         });
-
 }
 
 module.exports = {

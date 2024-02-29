@@ -5,14 +5,10 @@ const UserModel = require('../models/user-model');
 
 const authenticatedUser = async (username, password) => {
     return UserModel.find({username})
-        .then(
-            user => {
-                return {
-                    user: user[0],
-                    isAuth: user[0]?.password === password
-                };
-            }
-        );
+        .then(user => ({
+            user: user[0],
+            isAuth: user[0]?.password === password
+        }));
 }
 
 const login = async (req, res) => {
@@ -41,7 +37,7 @@ const login = async (req, res) => {
         })
         .catch(() => {
             return res.status(418).send({message: 'Invalid Login. Check username and password'});
-        })
+        });
 };
 
 const checkAuth = (req, res, next) => {
@@ -56,7 +52,7 @@ const checkAuth = (req, res, next) => {
             next();
         });
     } else {
-        return res.status(403).send({message: 'User not logged in!'})
+        return res.status(403).send({message: 'User not logged in!'});
     }
 };
 
