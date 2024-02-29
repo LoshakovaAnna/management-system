@@ -8,7 +8,8 @@ const {transformToSendFormat} = require('../utils');
 
 dayjs.extend(customParseFormat);
 const getDate = (d) => {
-    return dayjs(d, 'DD.MM.YY').toDate();
+    const dd = dayjs(d, 'DD.MM.YYYY');
+    return dd.toISOString();
 };
 
 /*
@@ -181,7 +182,7 @@ const addTask = async (req, res) => {
     }
     const {title, description, status, projectId, employeeId} = req.body;
     const startDate = req.body.startDate ? getDate(req.body.startDate) : new Date();
-    const endDate = req.body.endDate ? getDate(req.body.startDate) : new Date();
+    const endDate = req.body.endDate ? getDate(req.body.endDate) : new Date();
 
     if (!title || !description || !status || !projectId || !employeeId) {
         return res.status(404)
