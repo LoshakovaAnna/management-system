@@ -32,10 +32,10 @@ app.use((req, res) => {
 });
 
 app.use('/api/v1/login', authRouter);
-app.use('/api/v1/projects', projectRouter);
 app.use('/api/v1/*', checkAuth);
-app.use('/api/v1/employees', employeeRouter);
 app.use('/api/v1/tasks', taskRouter);
+app.use('/api/v1/projects', projectRouter);
+app.use('/api/v1/employees', employeeRouter);
 
 
 
