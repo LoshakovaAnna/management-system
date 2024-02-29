@@ -1,0 +1,27 @@
+<main>
+  <app-page-title title="Login Page"/>
+
+  <form [formGroup]="loginForm" (ngSubmit)="sendLogin()" class="content-container">
+    <mat-card>
+      <mat-card-content>
+        <div class="flex-row full-width" >
+          <mat-form-field class="full-width">
+            <mat-label class="capitalize">Username</mat-label>
+            <input matInput formControlName="username">
+          </mat-form-field>
+        </div>
+        <div class="flex-row full-width" >
+          <mat-form-field class="full-width">
+            <mat-label class="capitalize">Password</mat-label>
+            <input matInput formControlName="password">
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="p-l-20">
+        <button mat-raised-button
+                [disabled]="!loginForm.valid"
+                color="primary" type="submit">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</main>

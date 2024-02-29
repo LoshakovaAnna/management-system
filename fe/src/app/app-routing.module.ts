@@ -15,6 +15,11 @@ const routes: Routes = [
       .then(mod => mod.HomePageComponent),
   },
   {
+    path: UrlPageEnum.login,
+    loadComponent: () => import('./modules/pages/login-page/login-page.component')
+      .then(mod => mod.LoginPageComponent),
+  },
+  {
     path: UrlPageEnum.projects,
     loadChildren: () => import('./modules/pages/projects-page/projects-page.module')
       .then(mod => mod.ProjectsPageModule),

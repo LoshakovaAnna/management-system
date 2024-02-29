@@ -1,5 +1,6 @@
 export enum UrlPageEnum {
   home = 'home',
+  login= 'login',
   projects = 'projects',
   tasks = 'tasks',
   employees = 'employees',
