@@ -12,8 +12,10 @@ Preparation:
 + update file .env with mongo cred
 
 
-To run server use `npm run start`. Navigate to `http://localhost:50000/`
+To run server use `npm run start-dev`. Navigate to `http://localhost:5000/`
 
+
+To init Database with mock data use `npm run start-init-mock-db`.
 
 
 
