@@ -5,9 +5,11 @@ const mongoose = require('mongoose');
 const EmployeeModel = require('../models/employee-model');
 const ProjectModel = require('../models/project-model');
 const TaskModel = require('../models/task-model');
+const UserModel = require('../models/user-model');
 const MOCK_EMPLOYEE = require('./employees');
 const MOCK_PROJECTS = require('./projects');
 const MOCK_TASKS = require('./tasks');
+const MOCK_USERS = require('./users');
 
 
 const app = express();
@@ -103,10 +105,27 @@ const createTasks = async (tasks) => {
         });
 }
 
+const createUsers = async (users) => {
+    if (!users || !users.length) {
+        return;
+    }
+
+    return UserModel.insertMany(users)
+        .then((d) => {
+                console.log(`Users  is filled with ${d.length} entries`)
+            }
+        )
+        .catch(error => {
+            console.log(`create users is failed`);
+            console.error(error)
+        });
+}
+
 start()
     .then(() => (createEmployee(MOCK_EMPLOYEE)))
     .then(() => (createProjects(MOCK_PROJECTS)))
     .then(() => (createTasks(MOCK_TASKS)))
+    .then(() => (createUsers(MOCK_USERS)))
     .catch((e) => {
         console.log(e)
     })
@@ -119,4 +138,4 @@ start()
             });
 
         }
-    )
+    );
