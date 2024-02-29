@@ -1,0 +1,39 @@
+@import "variables";
+@import "library";
+
+body {
+  background: $dark-gray;
+}
+
+
+table.mat-mdc-table thead {
+  background: $primary-color;
+}
+
+.content-container {
+  border: 1px solid $light-gray;
+  border-radius: 4px;
+  background: $gray-color;
+  margin: 20px;
+}
+
+th {
+  vertical-align: middle;
+}
+
+.notify-msg.mat-mdc-snack-bar-container {
+  .mdc-snackbar__surface {
+    background-color: $gray-color;
+    border: 3px solid $light-gray;
+    border-radius: 4px;
+  }
+
+  .mdc-snackbar__label {
+
+    color: white;
+  }
+
+  &.error-msg .mdc-snackbar__label {
+    color: $light-red;
+  }
+}
