@@ -37,7 +37,6 @@ export class ProjectManageComponent implements OnInit {
     this.isNewProject = !this.project;
     this.title = this.isNewProject ? ' Create Project' : 'Edit Project';
     if (this.project) {
-      // @ts-ignore
       this.projectForm.patchValue(this.project);
     }
     this.projectForm.get('id')?.disable();

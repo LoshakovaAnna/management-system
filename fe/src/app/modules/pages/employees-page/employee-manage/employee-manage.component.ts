@@ -42,7 +42,6 @@ export class EmployeeManageComponent implements OnInit {
     this.isNewEmployee = !this.employee;
     this.title = this.isNewEmployee ? ' Create Employee' : 'Edit Employee';
     if (this.employee) {
-      // @ts-ignore
       this.employeeForm.patchValue(this.employee);
     }
     this.employeeForm.get('id')?.disable();

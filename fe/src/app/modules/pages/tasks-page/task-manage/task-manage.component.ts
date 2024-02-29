@@ -7,9 +7,10 @@ import {cloneDeep} from 'lodash';
 import {first, forkJoin} from 'rxjs';
 
 import {UrlPageEnum} from '@core/enums';
-import {EmployeeModel, ProjectModel, TaskModel} from '@core/models';
+import {EmployeeModel, ProjectModel,  TaskModel, TaskStatusEnum} from '@core/models';
 import {DATE_FORMAT} from '@consts/date.const';
 import {EMPLOYEE_SERVICE, PROJECT_SERVICE, SpinnerService, TASK_SERVICE} from '@core/services';
+import {TaskForm} from '@core/types';
 
 @Component({
   selector: 'app-task-manage',
@@ -33,15 +34,39 @@ export class TaskManageComponent implements OnInit {
   task!: TaskModel;
   project!: ProjectModel;
 
-  taskForm = new FormGroup({
-    id: new FormControl(''),
-    status: new FormControl('Not Started', [Validators.required]),
-    title: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
-    startDate: new FormControl('', [Validators.required]),
-    endDate: new FormControl('',),
-    projectId: new FormControl('', [Validators.required]),
-    employeeId: new FormControl('', [Validators.required]),
+  taskForm = new FormGroup<TaskForm>({
+    id: new FormControl('', {
+      asyncValidators: [],
+      validators: [],
+      nonNullable: true,
+    }),
+    status: new FormControl(TaskStatusEnum.NotStarted, {
+      asyncValidators: [],
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    title: new FormControl('', {
+      asyncValidators: [],
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    description: new FormControl('', {
+      asyncValidators: [],
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    startDate: new FormControl(null, [Validators.required]),
+    endDate: new FormControl(null,),
+    projectId: new FormControl('', {
+      asyncValidators: [],
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    employeeId: new FormControl('', {
+      asyncValidators: [],
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
   });
   statuses = [
     'Not Started', 'In progress', 'Finished', 'Delay'
@@ -64,7 +89,6 @@ export class TaskManageComponent implements OnInit {
       if (this.task.endDate) {
         this.task.endDate = moment(this.task.endDate);
       }
-      // @ts-ignore
       this.taskForm.patchValue(this.task);
     }
     if (this.project) {
@@ -87,8 +111,8 @@ export class TaskManageComponent implements OnInit {
         },
       )
       .add(() => {
-      this.spinnerService.hideSpinner();
-    });
+        this.spinnerService.hideSpinner();
+      });
   }
 
 
